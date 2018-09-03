@@ -22,7 +22,7 @@ public class PlayerLogicComponent implements IComponent, IObservable {
 
     public PlayerLogicComponent(GameMap mapIn) {
         map = mapIn;
-        this.observers = new ArrayList();
+        this.observers = new ArrayList<IObserver>();
     }
 
     @Override

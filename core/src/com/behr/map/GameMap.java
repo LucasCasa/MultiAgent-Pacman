@@ -24,13 +24,13 @@ public class GameMap {
     private TiledMap map;
 
     // collision data
-    private MapCollisionComponent collisionHandler;
+    private map.MapCollisionComponent collisionHandler;
 
     // Rendering    
-    public MapRenderingComponent renderer;
+    public map.MapRenderingComponent renderer;
     
     // holds information about dots
-    private DotLayer dotLayer;
+    private map.DotLayer dotLayer;
 
     // Constructor recieves file path to the TMX map file
     public GameMap(String mapPathIn) {
@@ -41,9 +41,9 @@ public class GameMap {
         }
 
         // set up the renderer
-        collisionHandler = new MapCollisionComponent(map);
-        renderer = new MapRenderingComponent(map);        
-        dotLayer = new DotLayer((TiledMapTileLayer) map.getLayers().get("dots"));
+        collisionHandler = new map.MapCollisionComponent(map);
+        renderer = new map.MapRenderingComponent(map);
+        dotLayer = new map.DotLayer((TiledMapTileLayer) map.getLayers().get("dots"));
     }
 
     /*
@@ -89,7 +89,7 @@ public class GameMap {
         return tileSizeInPx;
     }
 
-    public DotLayer getDotLayer() {
+    public map.DotLayer getDotLayer() {
         return dotLayer;
     }
 
@@ -112,7 +112,7 @@ public class GameMap {
     }
 
     public void resetMapDots(){
-        dotLayer = new DotLayer((TiledMapTileLayer) map.getLayers().get("dots"));
+        dotLayer = new map.DotLayer((TiledMapTileLayer) map.getLayers().get("dots"));
     }
 
     public void reloadMap() {
@@ -121,8 +121,8 @@ public class GameMap {
         }
 
         // set up the renderer
-        collisionHandler = new MapCollisionComponent(map);
-        renderer = new MapRenderingComponent(map);
-        dotLayer = new DotLayer((TiledMapTileLayer) map.getLayers().get("dots"));
+        collisionHandler = new map.MapCollisionComponent(map);
+        renderer = new map.MapRenderingComponent(map);
+        dotLayer = new map.DotLayer((TiledMapTileLayer) map.getLayers().get("dots"));
     }
 }

@@ -1,7 +1,7 @@
 package com.behr.screens;
 
+import com.behr.assets.Assets;
 import com.behr.pacdan.PacDanGame;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.behr.assets.Assets;
 
 public class SplashScreen implements Screen {
 

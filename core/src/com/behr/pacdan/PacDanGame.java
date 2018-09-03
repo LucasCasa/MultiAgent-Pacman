@@ -32,7 +32,7 @@ public class PacDanGame extends Game {
     public static BitmapFont bigFont;
     
     // high scores storage
-    public static List<Integer> highScores = new ArrayList();
+    public static List<Integer> highScores = new ArrayList<Integer>();
 
     @Override
     public void create() {
@@ -49,11 +49,9 @@ public class PacDanGame extends Game {
         params.size = 30;        
         smallFont = gen.generateFont(params);
         smallFont.setColor(Color.WHITE);
-        smallFont.setScale(2f);
         params.size = 48;
         bigFont = gen.generateFont(params);
         bigFont.setColor(Color.WHITE);
-        bigFont.setScale(2f);
         smallFont.setFixedWidthGlyphs("0123456789");
         
         
