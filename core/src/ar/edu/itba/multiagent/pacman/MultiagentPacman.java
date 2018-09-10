@@ -25,6 +25,14 @@ public class MultiagentPacman extends ApplicationAdapter {
 	GhostRenderer gr;
 	PlayerRenderer pr;
 	Player p;
+	Ghost g1;
+	Ghost g2;
+	Ghost g3;
+	Ghost g4;
+	GhostRenderer gr1;
+	GhostRenderer gr2;
+	GhostRenderer gr3;
+	GhostRenderer gr4;
 	TiledMap map;
 	TiledMapRenderer m;
 	OrthographicCamera camera;
@@ -32,15 +40,29 @@ public class MultiagentPacman extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		//img = new Texture("badlogic.jpg");
-		Ghost g = new Ghost();
 		map = new TmxMapLoader().load("map/PACMAP.tmx");
 		GameMap gm = new GameMap(map);
+		g1 = new Ghost(gm);
+		g1.setPosition(new Vector2(50,50));
+		g2 = new Ghost(gm);
+		g1.setPosition(new Vector2(220,222));
+		g3 = new Ghost(gm);
+		g1.setPosition(new Vector2(50,220));
+		g4 = new Ghost(gm);
+		g1.setPosition(new Vector2(220,50));
+
 		m = new OrthogonalTiledMapRenderer(map);
 		p = new Player(gm);
 		p.setPosition(new Vector2(100, 100));
 		Texture pt = new Texture("sprites/Pacman_Anim.png");
-		Texture t = new Texture("sprites/CyanGhost_Anim.png");
-		gr = new GhostRenderer(g, t);
+		Texture t1 = new Texture("sprites/CyanGhost_Anim.png");
+		Texture t2 = new Texture("sprites/OrangeGhost_Anim.png");
+		Texture t3 = new Texture("sprites/PinkGhost_Anim.png");
+		Texture t4 = new Texture("sprites/RedGhost_Anim.png");
+		gr1 = new GhostRenderer(g1, t1);
+		gr2 = new GhostRenderer(g2, t2);
+		gr3 = new GhostRenderer(g3, t3);
+		gr4 = new GhostRenderer(g4, t4);
 		pr = new PlayerRenderer(p, pt);
 		Gdx.input.setInputProcessor(new PlayerInput(p));
 		camera = new OrthographicCamera();
@@ -55,6 +77,11 @@ public class MultiagentPacman extends ApplicationAdapter {
 	public void render () {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		p.update(deltaTime);
+		g1.update(deltaTime);
+		g2.update(deltaTime);
+		g3.update(deltaTime);
+		g4.update(deltaTime);
+
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -63,7 +90,10 @@ public class MultiagentPacman extends ApplicationAdapter {
 		batch.begin();
 		m.setView(camera);
 		//batch.draw(img, 0, 0);
-		gr.render(batch, deltaTime);
+		gr1.render(batch, deltaTime);
+		gr2.render(batch, deltaTime);
+		gr3.render(batch, deltaTime);
+		gr4.render(batch, deltaTime);
 		pr.render(batch, deltaTime);
 		batch.end();
 	}

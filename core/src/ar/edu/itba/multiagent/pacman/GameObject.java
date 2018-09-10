@@ -4,17 +4,78 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GameObject {
 	private Direction direction = Direction.UP;
-	private Vector2 position = new Vector2(0, 0);
+	private Vector2 position = new Vector2(50, 50);
 	private int width = 16;
 	private int height = 16;
+	protected GameMap gameMap;
+	protected Direction desiredDirection = null;
 
-	public GameObject() {
-
+	public GameObject(GameMap gameMap) {
+		this.gameMap = gameMap;
 	}
 
 	public GameObject(Direction d, Vector2 p){
 		direction = d;
 		position = p;
+	}
+
+	public boolean canMove(Vector2 v){
+		return !gameMap.hasWall(getPosition(), v);
+	}
+
+	public void update(float deltaTime){
+		tryToChangeDirection(desiredDirection);
+		if(gameMap.canWalk(getPosition(), getDirection().directionVector())) {
+			normalizeToCenter(deltaTime);
+			Vector2 p = getPosition();
+			p.add(getDirection().directionVector().cpy().scl(100 * deltaTime));
+			walkToPosition(p);
+		}
+	}
+
+	private void walkToPosition(Vector2 p) {
+		if(gameMap.isOutside(p)){
+			System.out.println(p.x + " " + p.x % 400);
+			if(p.x < 0) {
+				setPosition(new Vector2(440, p.y));
+			} else {
+				setPosition(new Vector2(0, p.y));
+			}
+		}
+	}
+
+	/** When you turn after or before the center of the tile, you became misaligned,
+	 * this function slowly sets you to the center of the tile
+	 * @param deltaTime time between frames
+	 */
+	public void normalizeToCenter(float deltaTime){
+		Vector2 extra = new Vector2(0, 0);
+		if (getDirection().directionVector().x != 0){
+			float y = getPosition().y;
+			float desiredY = y - (y % getHeight()) + getHeight() / 2;
+			extra.set(0, desiredY - y);
+		} else if(getDirection().directionVector().y != 0) {
+			float x = getPosition().x;
+			float desiredX = x - (x % getWidth()) + getWidth() / 2;
+			extra.set(desiredX - x, 0);
+		}
+		getPosition().add(extra.scl(20 * deltaTime));
+	}
+
+	/**
+	 * Tries to change the direction of the object to the desired direction, if it can't then nothing happens
+	 * @param d
+	 */
+	public void tryToChangeDirection(Direction d){
+		if(d == null)
+			return;
+
+		if(canMove(d.directionVector())){
+			setDirection(d);
+			desiredDirection = null;
+		} else {
+			desiredDirection = d;
+		}
 	}
 
 	public Direction getDirection() {
