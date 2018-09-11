@@ -1,8 +1,9 @@
-package ar.edu.itba.multiagent.pacman;
+package ar.edu.itba.multiagent.pacman.environment;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 
 public class GameMap {
@@ -11,7 +12,7 @@ public class GameMap {
 	private boolean[][] blocks = new boolean[HEIGHT][WIDTH];
 	private boolean[][] smallDots = new boolean[HEIGHT][WIDTH];
 	private boolean[][] bigDots = new boolean[HEIGHT][WIDTH];
-	TiledMapTileLayer map;
+	private TiledMapTileLayer map;
 
 	public GameMap(TiledMap m){
 		map = (TiledMapTileLayer) m.getLayers().get("dots");
@@ -47,29 +48,23 @@ public class GameMap {
 
 	/**
 	 * Relative tile number
-	 * @param x
-	 * @param y
-	 * @return
 	 */
-	public boolean canWalkLocal(int x, int y){
-		return !blocks[HEIGHT - y - 1][x];
+	public boolean canWalkLocal(GridPoint2 position){
+		return !blocks[HEIGHT - position.y - 1][position.x];
 	}
 
 	/**
 	 * Global position on the world
-	 * @param x
-	 * @param y
-	 * @return
 	 */
-	public boolean canWalkGlobal(float x, float y){
-		int px = (int)(x / 16);
-		int py = (int)((y - 32) / 16);
-		return !blocks[HEIGHT - py - 1][px];
+	public boolean canWalkGlobal(Vector2 position){
+		GridPoint2 boardPosition = PositionUtils.worldToBoard(position);
+		return !blocks[HEIGHT - boardPosition.y - 1][boardPosition.x];
 	}
 
-	public boolean canWalk(Vector2 position, Vector2 direction){
-		int x = (int)((position.x / 16) + direction.x);
-		int y = (int)(((position.y - 32)/ 16) + direction.y);
+	public boolean canWalk(Vector2 position, GridPoint2 direction){
+		GridPoint2 boardPosition = PositionUtils.worldToBoard(position);
+		int x = boardPosition.x + direction.x;
+		int y = boardPosition.y + direction.y;
 		if(x < 0 || x > WIDTH - 1){
 			return true;
 		}
@@ -86,35 +81,38 @@ public class GameMap {
 		}
 		return canMoveToNext || canMoveToCenterLine;
 	}
-	public boolean hasWall(Vector2 position, Vector2 direction){
-		int x = (int)((position.x / 16) + direction.x);
+
+	public boolean hasWall(Vector2 position, GridPoint2 direction){
+		return hasWall(PositionUtils.worldToBoard(position), direction);
+	}
+
+	boolean hasWall(GridPoint2 position, GridPoint2 direction){
+		int x = position.x  + direction.x;
+		int y = position.y + direction.y;
 
 		if(x < 0 || x > WIDTH - 1){
 			return false;
 		}
-
-		int y = (int)(((position.y - 32)/ 16) + direction.y);
 		return blocks[HEIGHT - y - 1][x];
 	}
 
-	public void eatDot(float x, float y){
-		int px = (int)(x / 16);
-		int py = (int)((y - 32) / 16);
-		smallDots[HEIGHT - py][px] = false;
-		System.out.println(px + " " + py);
-		map.setCell(px , py + 2, null);
+	public void eatDot(Vector2 position){
+		GridPoint2 boardPosition = PositionUtils.worldToBoard(position);
+		smallDots[HEIGHT - boardPosition.y][boardPosition.x] = false;
+		map.setCell(boardPosition.x , boardPosition.y + 2, null);
 	}
-	void prettyPrint(){
+
+	private void prettyPrint(){
 		for(int j = 0; j < HEIGHT; j++){
 			for(int i = 0; i<WIDTH;i++){
 				System.out.print((blocks[j][i]?"1":(smallDots[j][i]?"2":(bigDots[j][i]?"3":"0"))) + " ");
 			}
-			System.out.println("");
+			System.out.println();
 		}
 	}
 
 	public boolean isOutside(Vector2 position) {
-		int x = ((int)(position.x / 16));
-		return x < 0 || x >= WIDTH ;
+		int x = PositionUtils.worldToBoard(position).x;
+		return x < 0 || x >= WIDTH;
 	}
 }

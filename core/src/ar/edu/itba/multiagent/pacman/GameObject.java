@@ -1,5 +1,8 @@
 package ar.edu.itba.multiagent.pacman;
 
+import ar.edu.itba.multiagent.pacman.environment.GameMap;
+import ar.edu.itba.multiagent.pacman.environment.PositionUtils;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 
 public class GameObject {
@@ -8,10 +11,12 @@ public class GameObject {
 	private int width = 16;
 	private int height = 16;
 	protected GameMap gameMap;
+	private int speed;
 	protected Direction desiredDirection = null;
 
-	public GameObject(GameMap gameMap) {
+	public GameObject(GameMap gameMap, int speed) {
 		this.gameMap = gameMap;
+		this.speed = speed;
 	}
 
 	public GameObject(Direction d, Vector2 p){
@@ -19,7 +24,7 @@ public class GameObject {
 		position = p;
 	}
 
-	public boolean canMove(Vector2 v){
+	protected boolean canMove(GridPoint2 v){
 		return !gameMap.hasWall(getPosition(), v);
 	}
 
@@ -28,7 +33,7 @@ public class GameObject {
 		if(gameMap.canWalk(getPosition(), getDirection().directionVector())) {
 			normalizeToCenter(deltaTime);
 			Vector2 p = getPosition();
-			p.add(getDirection().directionVector().cpy().scl(100 * deltaTime));
+			p.add(PositionUtils.gridToVector(direction.directionVector()).scl(speed * deltaTime));
 			walkToPosition(p);
 		}
 	}
@@ -48,15 +53,15 @@ public class GameObject {
 	 * this function slowly sets you to the center of the tile
 	 * @param deltaTime time between frames
 	 */
-	public void normalizeToCenter(float deltaTime){
+	private void normalizeToCenter(float deltaTime){
 		Vector2 extra = new Vector2(0, 0);
 		if (getDirection().directionVector().x != 0){
 			float y = getPosition().y;
-			float desiredY = y - (y % getHeight()) + getHeight() / 2;
+			float desiredY = y - (y % getHeight()) + getHeight() / 2f;
 			extra.set(0, desiredY - y);
 		} else if(getDirection().directionVector().y != 0) {
 			float x = getPosition().x;
-			float desiredX = x - (x % getWidth()) + getWidth() / 2;
+			float desiredX = x - (x % getWidth()) + getWidth() / 2f;
 			extra.set(desiredX - x, 0);
 		}
 		getPosition().add(extra.scl(20 * deltaTime));
@@ -64,17 +69,19 @@ public class GameObject {
 
 	/**
 	 * Tries to change the direction of the object to the desired direction, if it can't then nothing happens
-	 * @param d
+	 * @param d desired direction
 	 */
-	public void tryToChangeDirection(Direction d){
+	public boolean tryToChangeDirection(Direction d){
 		if(d == null)
-			return;
+			return false;
 
 		if(canMove(d.directionVector())){
 			setDirection(d);
 			desiredDirection = null;
+			return true;
 		} else {
 			desiredDirection = d;
+			return false;
 		}
 	}
 
@@ -82,7 +89,7 @@ public class GameObject {
 		return direction;
 	}
 
-	public void setDirection(Direction direction) {
+	private void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 

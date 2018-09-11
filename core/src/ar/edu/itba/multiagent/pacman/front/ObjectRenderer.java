@@ -13,13 +13,13 @@ public abstract class ObjectRenderer {
 	private float timePerFrame = 0.2f;
 	private float timeSinceLastChange = 0f;
 
-	public ObjectRenderer(GameObject o, Texture t){
+	ObjectRenderer(GameObject o, Texture t){
 		object = o;
 		sprite = t;
 	}
 
 	public void render(SpriteBatch batch, float deltaTime) {
-		int spriteX = 0, spriteY = 0;
+		int spriteX, spriteY = 0;
 		timeSinceLastChange += deltaTime;
 		spriteX = step * (sprite.getWidth() / totalSteps);
 		int unit = sprite.getHeight() / 4;
@@ -36,7 +36,7 @@ public abstract class ObjectRenderer {
 				spriteY = 3 * unit;
 				break;
 		}
-		batch.draw(sprite, object.getPosition().x - object.getWidth() / 2,object.getPosition().y - object.getHeight() / 2, object.getWidth(), object.getHeight(), spriteX, spriteY, sprite.getWidth() / totalSteps, unit, false, false);
+		batch.draw(sprite, object.getPosition().x - object.getWidth() / 2f,object.getPosition().y - object.getHeight() / 2f, object.getWidth(), object.getHeight(), spriteX, spriteY, sprite.getWidth() / totalSteps, unit, false, false);
 		if (timePerFrame < timeSinceLastChange) {
 			step = (step + 1) % totalSteps;
 			timeSinceLastChange = 0;
@@ -47,10 +47,14 @@ public abstract class ObjectRenderer {
 		return totalSteps;
 	}
 
-	public void setTotalSteps(int totalSteps) {
+	void setTotalSteps(int totalSteps) {
 		this.totalSteps = totalSteps;
 	}
-	public void setTimePerFrame(float time){
+	void setTimePerFrame(float time){
 		timePerFrame = time;
+	}
+
+	public void dispose() {
+		sprite.dispose();
 	}
 }

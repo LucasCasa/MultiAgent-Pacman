@@ -1,5 +1,6 @@
-package ar.edu.itba.multiagent.pacman;
+package ar.edu.itba.multiagent.pacman.player;
 
+import ar.edu.itba.multiagent.pacman.Direction;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 

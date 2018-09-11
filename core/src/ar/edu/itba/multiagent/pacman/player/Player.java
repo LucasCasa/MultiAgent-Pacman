@@ -1,15 +1,20 @@
-package ar.edu.itba.multiagent.pacman;
+package ar.edu.itba.multiagent.pacman.player;
+
+import ar.edu.itba.multiagent.pacman.Direction;
+import ar.edu.itba.multiagent.pacman.GameObject;
+import ar.edu.itba.multiagent.pacman.environment.GameMap;
 
 public class Player extends GameObject {
 
 	public Player(GameMap gm){
-		super(gm);
+		super(gm, 100);
+
 	}
 
 	/** Cancel the desired direction
 	 * @param d the direction you no longer want to go
 	 */
-	public void noLongerDesired(Direction d){
+	void noLongerDesired(Direction d){
 		if(desiredDirection == d){
 			desiredDirection = null;
 		}
@@ -17,6 +22,6 @@ public class Player extends GameObject {
 
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		gameMap.eatDot(getPosition().x, getPosition().y);
+		gameMap.eatDot(getPosition());
 	}
 }

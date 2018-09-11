@@ -1,6 +1,7 @@
 package ar.edu.itba.multiagent.pacman;
 
 import ar.edu.itba.multiagent.pacman.agents.Ghost;
+import ar.edu.itba.multiagent.pacman.player.Player;
 
 import java.util.List;
 
