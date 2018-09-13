@@ -6,10 +6,12 @@ public class PacmanSighting {
 
 	private Vector2 position;
 	private Direction direction;
+	private int turn;
 
-	public PacmanSighting(Vector2 p, Direction d){
+	public PacmanSighting(Vector2 p, Direction d, int turn){
 		position = p;
 		direction = d;
+		this.turn = turn;
 	}
 
 	public Vector2 getPosition() {
@@ -28,4 +30,7 @@ public class PacmanSighting {
 		this.direction = direction;
 	}
 
+	public int getTurn() {
+		return turn;
+	}
 }

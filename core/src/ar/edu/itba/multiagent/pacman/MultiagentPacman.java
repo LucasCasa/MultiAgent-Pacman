@@ -39,6 +39,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 	private Config config;
 	private World w;
 	private boolean gameOver = false;
+	private int turn = 0;
 
 	@Override
 	public void create () {
@@ -74,11 +75,13 @@ public class MultiagentPacman extends ApplicationAdapter {
 	@Override
 	public void render () {
 		float deltaTime = Gdx.graphics.getDeltaTime();
+		turn++;
+		w.update(deltaTime, turn);
 		if(!gameOver) {
 			p.update(deltaTime);
 
 			Collections.shuffle(agents);
-			agents.forEach(agent -> agent.update(deltaTime));
+			agents.forEach(agent -> agent.update(deltaTime, turn));
 			agents.forEach(agent -> {
 				if (PositionUtils.worldToBoard(agent.getPosition()).equals(PositionUtils.worldToBoard(p.getPosition()))) {
 					gameOver = true;
@@ -95,7 +98,6 @@ public class MultiagentPacman extends ApplicationAdapter {
 		//batch.draw(img, 0, 0);
 		renderers.forEach(rend -> rend.render(batch, deltaTime));
 		batch.end();
-		w.writeBlackBoard(null);
 	}
 	
 	@Override

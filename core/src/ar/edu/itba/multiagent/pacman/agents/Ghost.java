@@ -18,16 +18,21 @@ public class Ghost extends GameObject {
 		this.w = w;
 	}
 
-	public void update(float deltaTime){
+	public void update(float deltaTime, int turn){
 		PacmanSighting p = w.sense(this);
 
 		if(p != null) {
-			w.writeBlackBoard(new PacmanSighting(p.getPosition().cpy(), p.getDirection()));
+			w.writeBlackBoard(p);
 		} else {
 			p = w.pollBlackBoard();
+			if(p != null && (turn - p.getTurn()) > 5 / deltaTime)
+				p = null;
 		}
 
 		if(p != null){
+			if(p.getPosition().dst2(getPosition()) < 10){
+				w.writeBlackBoard(null);
+			}
 			chase(p);
 		}else {
 			timeToChange += deltaTime;
@@ -36,19 +41,7 @@ public class Ghost extends GameObject {
 			}
 			if (timeToChange > 2) {
 				timeToChange = 0;
-				switch ((int) (Math.random() * 4)) {
-					case 0:
-						tryToChangeDirection(Direction.UP);
-						break;
-					case 1:
-						tryToChangeDirection(Direction.DOWN);
-						break;
-					case 2:
-						tryToChangeDirection(Direction.LEFT);
-						break;
-					case 3:
-						tryToChangeDirection(Direction.RIGHT);
-				}
+				randomDirection();
 			}
 		}
 		super.update(deltaTime);
@@ -56,21 +49,53 @@ public class Ghost extends GameObject {
 
 	private void chase(PacmanSighting p) {
 		Vector2 pacManPosition = p.getPosition();
-		boolean success = false;
-		if(pacManPosition.x - getPosition().x > 1f) {
-			success = tryToChangeDirection(Direction.RIGHT);
+		//boolean success = false;
+		//boolean isTrapped = canMove(getDirection().directionVector());
+		//UP, DOWN, LEFT, RIGHT
+		float[] forces = {pacManPosition.y - getPosition().y, getPosition().y - pacManPosition.y, getPosition().x - pacManPosition.x, pacManPosition.x - getPosition().x};
+		boolean[] valid = {
+				canMove(Direction.UP.directionVector()) && getDirection() != Direction.DOWN,
+				canMove(Direction.DOWN.directionVector()) && getDirection() != Direction.UP,
+				canMove(Direction.LEFT.directionVector()) && getDirection() != Direction.RIGHT,
+				canMove(Direction.RIGHT.directionVector()) && getDirection() != Direction.LEFT
+		};
+		float maxValidForce = Integer.MIN_VALUE;
+		int maxValidIndex = -1;
+		for(int i = 0; i< 4; i++){
+			if(valid[i] && forces[i] > maxValidForce){
+				maxValidIndex = i;
+				maxValidForce = forces[i];
+			}
 		}
-		if(pacManPosition.x - getPosition().x < -1f && !success){
-			success = tryToChangeDirection(Direction.LEFT);
-		}
-		if(pacManPosition.y - getPosition().y > 1f && !success) {
-			success = tryToChangeDirection(Direction.UP);
-		}
-		if(pacManPosition.y - getPosition().y < -1f && !success) {
-			tryToChangeDirection(Direction.DOWN);
-		}
+		tryToChangeDirection(Direction.values()[maxValidIndex]);
 	}
 
+	private void randomDirection(){
+		boolean success = false;
+		while(!success) {
+			switch ((int) (Math.random() * 4)) {
+				case 0:
+					if (getDirection() != Direction.DOWN) {
+						success = tryToChangeDirection(Direction.UP);
+						break;
+					}
+				case 1:
+					if (getDirection() != Direction.UP) {
+						success = tryToChangeDirection(Direction.DOWN);
+						break;
+					}
+				case 2:
+					if (getDirection() != Direction.RIGHT) {
+						success = tryToChangeDirection(Direction.LEFT);
+						break;
+					}
+				case 3:
+					if (getDirection() != Direction.LEFT) {
+						success = tryToChangeDirection(Direction.RIGHT);
+					}
+			}
+		}
+	}
 
 	public int getVisibility() {
 		return visibility;
