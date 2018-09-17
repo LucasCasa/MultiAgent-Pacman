@@ -75,6 +75,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 	@Override
 	public void render () {
 		float deltaTime = Gdx.graphics.getDeltaTime();
+		System.out.println((int)(1 / deltaTime));
 		turn++;
 		w.update(deltaTime, turn);
 		if(!gameOver) {

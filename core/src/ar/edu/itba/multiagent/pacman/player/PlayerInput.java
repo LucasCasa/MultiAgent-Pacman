@@ -17,19 +17,15 @@ public class PlayerInput implements InputProcessor {
 		switch (keycode){
 			case Input.Keys.UP:
 				player.tryToChangeDirection(Direction.UP);
-				System.out.println("UP");
 				break;
 			case Input.Keys.DOWN:
 				player.tryToChangeDirection(Direction.DOWN);
-				System.out.println("Down");
 				break;
 			case Input.Keys.LEFT:
 				player.tryToChangeDirection(Direction.LEFT);
-				System.out.println("left");
 				break;
 			case Input.Keys.RIGHT:
 				player.tryToChangeDirection(Direction.RIGHT);
-				System.out.println("right");
 				break;
 		}
 		return false;
@@ -40,19 +36,15 @@ public class PlayerInput implements InputProcessor {
 		switch (keycode){
 			case Input.Keys.UP:
 				player.noLongerDesired(Direction.UP);
-				System.out.println("UP");
 				break;
 			case Input.Keys.DOWN:
 				player.noLongerDesired(Direction.DOWN);
-				System.out.println("Down");
 				break;
 			case Input.Keys.LEFT:
 				player.noLongerDesired(Direction.LEFT);
-				System.out.println("left");
 				break;
 			case Input.Keys.RIGHT:
 				player.noLongerDesired(Direction.RIGHT);
-				System.out.println("right");
 				break;
 		}
 		return false;
