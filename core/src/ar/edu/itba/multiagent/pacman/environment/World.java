@@ -20,18 +20,21 @@ public class World {
 	public void update(float deltaTime, int turn){
 		this.turn = turn;
 	}
+
 	public PacmanSighting sense(Ghost agent){
 		for (Direction dir: Direction.values()){
-			GridPoint2 currentPosition = PositionUtils.worldToBoard(agent.getPosition());
-			GridPoint2 playerPosition = PositionUtils.worldToBoard(player.getPosition());
-			for (int i = 0; i < agent.getVisibility(); i++) {
-				if(currentPosition.equals(playerPosition)){
-					return new PacmanSighting(player.getPosition().cpy(), player.getDirection(), turn);
+			if(agent.getVisiblityDirections().get(dir.ordinal())) {
+				GridPoint2 currentPosition = PositionUtils.worldToBoard(agent.getPosition());
+				GridPoint2 playerPosition = PositionUtils.worldToBoard(player.getPosition());
+				for (int i = 0; i < agent.getVisibility(); i++) {
+					if (currentPosition.equals(playerPosition)) {
+						return new PacmanSighting(player.getPosition().cpy(), player.getDirection(), turn);
+					}
+					if (gm.hasWall(currentPosition, dir.directionVector())) {
+						break;
+					}
+					currentPosition.add(dir.directionVector());
 				}
-				if(gm.hasWall(currentPosition, dir.directionVector())) {
-					break;
-				}
-				currentPosition.add(dir.directionVector());
 			}
 		}
 		return null;

@@ -8,14 +8,21 @@ import ar.edu.itba.multiagent.pacman.environment.World;
 import com.badlogic.gdx.math.Vector2;
 import com.typesafe.config.Config;
 
+import java.util.List;
+import java.util.Random;
+
 public class Ghost extends GameObject {
 	private int visibility;
+	private List<Boolean> visiblityDirections;
 	private float timeToChange = 0f;
 	private World w;
+	private Random random;
 	public Ghost(GameMap gm, Config c, World w) {
 		super(gm, c.getInt("speed"));
 		this.visibility = c.getInt("visibility");
+		this.visiblityDirections = c.getBooleanList("visibility-directions");
 		this.w = w;
+		this.random = new Random(c.getInt("seed"));
 	}
 
 	public void update(float deltaTime, int turn){
@@ -73,7 +80,7 @@ public class Ghost extends GameObject {
 	private void randomDirection(){
 		boolean success = false;
 		while(!success) {
-			switch ((int) (Math.random() * 4)) {
+			switch (random.nextInt(4)) {
 				case 0:
 					if (getDirection() != Direction.DOWN) {
 						success = tryToChangeDirection(Direction.UP);
@@ -99,5 +106,9 @@ public class Ghost extends GameObject {
 
 	public int getVisibility() {
 		return visibility;
+	}
+
+	public List<Boolean> getVisiblityDirections() {
+		return visiblityDirections;
 	}
 }

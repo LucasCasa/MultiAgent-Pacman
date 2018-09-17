@@ -43,7 +43,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		config = ConfigFactory.parseFile(new File("application.conf"));
+		config = ConfigFactory.parseFile(new File("application.conf")).resolve();
 		batch = new SpriteBatch();
 		map = new TmxMapLoader().load("map/PACMAP.tmx");
 		GameMap gm = new GameMap(map);
