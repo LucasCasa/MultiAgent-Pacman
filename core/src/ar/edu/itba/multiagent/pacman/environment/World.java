@@ -23,7 +23,7 @@ public class World {
 
 	public PacmanSighting sense(Ghost agent){
 		for (Direction dir: Direction.values()){
-			if(agent.getVisiblityDirections().get(dir.ordinal())) {
+			if(agent.getVisibilityDirections().get(dir.ordinal())) {
 				GridPoint2 currentPosition = PositionUtils.worldToBoard(agent.getPosition());
 				GridPoint2 playerPosition = PositionUtils.worldToBoard(player.getPosition());
 				for (int i = 0; i < agent.getVisibility(); i++) {

@@ -24,7 +24,7 @@ public class GameObject {
 		position = p;
 	}
 
-	protected boolean canMove(GridPoint2 v){
+	public boolean canMove(GridPoint2 v){
 		return !gameMap.hasWall(getPosition(), v);
 	}
 
