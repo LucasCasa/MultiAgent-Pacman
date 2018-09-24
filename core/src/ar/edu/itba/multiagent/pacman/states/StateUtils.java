@@ -1,4 +1,4 @@
-package ar.edu.itba.multiagent.pacman.strategies;
+package ar.edu.itba.multiagent.pacman.states;
 
 public class StateUtils {
 

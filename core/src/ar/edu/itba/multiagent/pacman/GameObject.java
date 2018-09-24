@@ -25,6 +25,9 @@ public class GameObject {
 	}
 
 	public boolean canMove(GridPoint2 v){
+		System.out.println("Can Move: " + !gameMap.hasWall(getPosition(), v));
+		System.out.println("Vector" + v);
+		System.out.println("-------------------------------");
 		return !gameMap.hasWall(getPosition(), v);
 	}
 

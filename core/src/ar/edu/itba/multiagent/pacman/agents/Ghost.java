@@ -1,19 +1,17 @@
 package ar.edu.itba.multiagent.pacman.agents;
 
-import ar.edu.itba.multiagent.pacman.Direction;
 import ar.edu.itba.multiagent.pacman.environment.GameMap;
 import ar.edu.itba.multiagent.pacman.GameObject;
-import ar.edu.itba.multiagent.pacman.PacmanSighting;
+import ar.edu.itba.multiagent.pacman.environment.EnemySighting;
 import ar.edu.itba.multiagent.pacman.environment.World;
-import ar.edu.itba.multiagent.pacman.strategies.State;
-import ar.edu.itba.multiagent.pacman.strategies.StateUtils;
-import com.badlogic.gdx.math.Vector2;
+import ar.edu.itba.multiagent.pacman.states.State;
+import ar.edu.itba.multiagent.pacman.states.StateUtils;
 import com.typesafe.config.Config;
 
 import java.util.List;
 import java.util.Random;
 
-public class Ghost extends GameObject {
+public class Ghost extends GameObject implements SensingAgent {
 	private int visibility;
 	private List<Boolean> visiblityDirections;
 	private State searchState;
@@ -32,7 +30,7 @@ public class Ghost extends GameObject {
 	}
 
 	public void update(float deltaTime, int turn){
-		PacmanSighting p = w.sense(this);
+		EnemySighting p = w.sense(this);
 		if(p != null) {
 			w.writeBlackBoard(p);
 		} else {

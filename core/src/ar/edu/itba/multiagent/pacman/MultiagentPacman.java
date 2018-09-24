@@ -7,6 +7,7 @@ import ar.edu.itba.multiagent.pacman.environment.World;
 import ar.edu.itba.multiagent.pacman.front.GhostRenderer;
 import ar.edu.itba.multiagent.pacman.front.ObjectRenderer;
 import ar.edu.itba.multiagent.pacman.front.PlayerRenderer;
+import ar.edu.itba.multiagent.pacman.player.AIPlayer;
 import ar.edu.itba.multiagent.pacman.player.Player;
 import ar.edu.itba.multiagent.pacman.player.PlayerInput;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -47,8 +48,13 @@ public class MultiagentPacman extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		map = new TmxMapLoader().load("map/PACMAP.tmx");
 		GameMap gm = new GameMap(map);
-		p = new Player(gm);
-		w = new World(gm, p);
+		w = new World(gm, p, agents);
+		if(config.getBoolean("pacman-agent")){
+			p = new AIPlayer(gm, w);
+		} else {
+			p = new Player(gm);
+		}
+		w.setPlayer(p);
 		loadGhost(gm, w);
 		m = new OrthogonalTiledMapRenderer(map);
 		p.setPosition(new Vector2(100, 100));
@@ -75,9 +81,8 @@ public class MultiagentPacman extends ApplicationAdapter {
 	@Override
 	public void render () {
 		float deltaTime = Gdx.graphics.getDeltaTime();
-		System.out.println((int)(1 / deltaTime));
 		turn++;
-		w.update(deltaTime, turn);
+		w.update(turn);
 		if(!gameOver) {
 			p.update(deltaTime);
 

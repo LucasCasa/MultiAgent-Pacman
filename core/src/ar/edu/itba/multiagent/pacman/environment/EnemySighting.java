@@ -1,14 +1,15 @@
-package ar.edu.itba.multiagent.pacman;
+package ar.edu.itba.multiagent.pacman.environment;
 
+import ar.edu.itba.multiagent.pacman.Direction;
 import com.badlogic.gdx.math.Vector2;
 
-public class PacmanSighting {
+public class EnemySighting implements SensingData {
 
 	private Vector2 position;
 	private Direction direction;
 	private int turn;
 
-	public PacmanSighting(Vector2 p, Direction d, int turn){
+	public EnemySighting(Vector2 p, Direction d, int turn){
 		position = p;
 		direction = d;
 		this.turn = turn;
