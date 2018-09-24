@@ -20,8 +20,10 @@ public class ConvergeState implements State {
 		if (turn - p.getTurn() < 500){
 			if(p.getPosition().dst(self.getPosition()) < 16){
 				self.getWorld().writeBlackBoard(null);
+				self.tryToChangeDirection(p.getDirection());
+			} else {
+				chase(self, p);
 			}
-			chase(self, p);
 		}
 	}
 

@@ -44,13 +44,32 @@ public class World {
 				for (int i = 0; i < agent.getVisibility() && !wall; i++) {
 					for(GridPoint2 enemy: enemiesPosition) {
 						if (currentPosition.equals(enemy)) {
-							return new EnemySighting(PositionUtils.boardToWorld(enemy), null, turn);
+							Direction d = getDirectionOfEnemy(enemy);
+							return new EnemySighting(PositionUtils.boardToWorld(enemy), d, turn);
 						}
 						if (gm.hasWall(currentPosition, dir.directionVector())) {
 							wall = true;
 						}
 					}
 					currentPosition.add(dir.directionVector());
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Given a position, then we get the gameobject in that position and return its direction
+	 * @param enemy desired position
+	 * @return direction of the desired GameObject
+	 */
+	private Direction getDirectionOfEnemy(GridPoint2 enemy) {
+		if(enemy.equals(PositionUtils.worldToBoard(player.getPosition()))){
+			return player.getDirection();
+		} else {
+			for(Ghost g : agents){
+				if(enemy.equals(PositionUtils.worldToBoard(g.getPosition()))){
+					return g.getDirection();
 				}
 			}
 		}
