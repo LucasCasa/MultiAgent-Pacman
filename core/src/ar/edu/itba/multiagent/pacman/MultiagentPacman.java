@@ -69,8 +69,9 @@ public class MultiagentPacman extends ApplicationAdapter {
 
 	private void loadGhost(GameMap gm, World w) {
 		List<String> names = config.getStringList("ghost-names");
+		int id =0;
 		for(String name : names){
-			Ghost ghost = new Ghost(gm, config.getConfig(name), w);
+			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w);
 			ghost.setPosition(new Vector2(16 * 14 ,16 * 20));
 			GhostRenderer ghostRenderer = new GhostRenderer(ghost, new Texture("sprites/" + name + "Ghost_Anim.png"));
 			agents.add(ghost);

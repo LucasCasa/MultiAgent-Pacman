@@ -2,6 +2,7 @@ package ar.edu.itba.multiagent.pacman.environment;
 
 import ar.edu.itba.multiagent.pacman.Direction;
 import ar.edu.itba.multiagent.pacman.agents.SensingAgent;
+import ar.edu.itba.multiagent.pacman.communication.Message;
 import ar.edu.itba.multiagent.pacman.player.AIPlayer;
 import ar.edu.itba.multiagent.pacman.player.Player;
 import ar.edu.itba.multiagent.pacman.agents.Ghost;
@@ -86,5 +87,13 @@ public class World {
 
 	public void setPlayer(Player p) {
 		this.player = p;
+	}
+
+	public void broadcast(Message message) {
+		for(Ghost g: agents) {
+			if (g.getId() != message.getSender()){
+				g.addMessage(message);
+			}
+		}
 	}
 }

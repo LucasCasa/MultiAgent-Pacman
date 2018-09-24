@@ -8,6 +8,8 @@ public class StateUtils {
 				return new RandomWalkState();
 			case "Converge":
 				return new ConvergeState();
+			case "Spread":
+				return new SpreadState();
 			default:
 				return null;
 		}

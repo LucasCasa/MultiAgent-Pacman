@@ -29,14 +29,7 @@ public class ConvergeState implements State {
 
 	private void chase(Ghost self, EnemySighting p) {
 		Vector2 pacManPosition = p.getPosition();
-
-		//UP, DOWN, LEFT, RIGHT
-		boolean[] valid = {
-				self.canMove(Direction.UP.directionVector()) && self.getDirection() != Direction.DOWN,
-				self.canMove(Direction.DOWN.directionVector()) && self.getDirection() != Direction.UP,
-				self.canMove(Direction.LEFT.directionVector()) && self.getDirection() != Direction.RIGHT,
-				self.canMove(Direction.RIGHT.directionVector()) && self.getDirection() != Direction.LEFT
-		};
+		boolean[] valid = self.getValidDirections();
 		self.tryToChangeDirection(PositionUtils.getBestDirection(self.getPosition(), pacManPosition, valid));
 	}
 }
