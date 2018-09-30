@@ -117,4 +117,13 @@ public class Ghost extends GameObject implements SensingAgent {
 				canMove(Direction.RIGHT.directionVector()) && getDirection() != Direction.LEFT
 		};
 	}
+
+	/*public boolean[] getValidDirections() {
+		return new boolean[]{
+				canMove(Direction.UP.directionVector()),
+				canMove(Direction.DOWN.directionVector()),
+				canMove(Direction.LEFT.directionVector()),
+				canMove(Direction.RIGHT.directionVector())
+		};
+	}*/
 }

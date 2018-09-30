@@ -7,8 +7,8 @@ import ar.edu.itba.multiagent.pacman.MultiagentPacman;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 448;
-		config.height = 496 + 48 - 16;
+		config.width = 600;
+		config.height = 800;
 		config.foregroundFPS = 60;
 		new LwjglApplication(new MultiagentPacman(), config);
 	}

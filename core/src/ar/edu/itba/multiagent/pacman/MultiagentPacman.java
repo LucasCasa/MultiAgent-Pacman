@@ -44,6 +44,8 @@ public class MultiagentPacman extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+		int width = 448;
+		int height = 496 + 48 - 16;
 		config = ConfigFactory.parseFile(new File("application.conf")).resolve();
 		batch = new SpriteBatch();
 		map = new TmxMapLoader().load("map/PACMAP.tmx");
@@ -62,7 +64,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 		renderers.add(new PlayerRenderer(p, pt));
 		Gdx.input.setInputProcessor(new PlayerInput(p));
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camera.setToOrtho(false, width, height);
 		camera.update();
 		m.setView(camera);
 	}
@@ -72,7 +74,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 		int id =0;
 		for(String name : names){
 			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w);
-			ghost.setPosition(new Vector2(16 * 14 ,16 * 20));
+			ghost.setPosition(new Vector2(16 * 14 ,16 * 21));
 			GhostRenderer ghostRenderer = new GhostRenderer(ghost, new Texture("sprites/" + name + "Ghost_Anim.png"));
 			agents.add(ghost);
 			renderers.add(ghostRenderer);
@@ -97,7 +99,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 		}
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		m.render();
 		batch.begin();
