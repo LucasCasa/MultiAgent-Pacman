@@ -75,7 +75,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 		for(String name : names){
 			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w);
 			ghost.setPosition(new Vector2(16 * 14 ,16 * 21));
-			GhostRenderer ghostRenderer = new GhostRenderer(ghost, new Texture("sprites/" + name + "Ghost_Anim.png"));
+			GhostRenderer ghostRenderer = new GhostRenderer(ghost, new Texture("sprites/" + name + "Ghost_Anim.png"), config.getBoolean("show-desired-direction"));
 			agents.add(ghost);
 			renderers.add(ghostRenderer);
 		}

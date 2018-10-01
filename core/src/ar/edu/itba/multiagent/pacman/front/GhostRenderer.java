@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class GhostRenderer extends ObjectRenderer {
 
-	public GhostRenderer(Ghost ghost, Texture sprite){
-		super(ghost, sprite);
+	public GhostRenderer(Ghost ghost, Texture sprite, boolean showDirection){
+		super(ghost, sprite, showDirection);
 		super.setTotalSteps(2);
 	}
 }

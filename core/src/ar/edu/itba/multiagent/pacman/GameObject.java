@@ -111,4 +111,8 @@ public class GameObject {
 	public int getHeight() {
 		return height;
 	}
+
+	public Direction getDesiredDirection(){
+	    return desiredDirection;
+    }
 }
