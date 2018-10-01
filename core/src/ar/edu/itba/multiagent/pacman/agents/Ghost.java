@@ -45,22 +45,24 @@ public class Ghost extends GameObject implements SensingAgent {
 	}
 
 	public void update(float deltaTime, int turn){
-		EnemySighting p = w.sense(this);
+		List<EnemySighting> p = w.sense(this);
+		EnemySighting pc;
 		broadcastPosition();
-		if(p != null) {
-			w.writeBlackBoard(p);
+		if(p.size() > 0) {
+			pc = p.get(0);
+			w.writeBlackBoard(p.get(0));
 		} else {
-			p = w.pollBlackBoard();
-			if(p != null && (turn - p.getTurn()) > 5 / deltaTime)
-				p = null;
+			 pc = w.pollBlackBoard();
+			if(pc != null && (turn - pc.getTurn()) > 5 / deltaTime)
+				pc = null;
 		}
 		while(!messages.isEmpty()){
 			Message m = messages.poll();
 			readMessage(m);
 		}
-		if(p != null){
+		if(pc != null){
 			pursuitState.update(this, deltaTime, turn, random);
-			if(p.getPosition().dst2(getPosition()) < 10){
+			if(pc.getPosition().dst2(getPosition()) < 10){
 				w.writeBlackBoard(null);
 			}
 		} else {

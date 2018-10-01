@@ -31,7 +31,8 @@ public class World {
 		this.turn = turn;
 	}
 
-	public EnemySighting sense(SensingAgent agent){
+	public List<EnemySighting> sense(SensingAgent agent){
+		List<EnemySighting> sightings = new ArrayList<>();
 		List<GridPoint2> enemiesPosition;
 		if(agent instanceof Ghost){
 			enemiesPosition = ImmutableList.of(PositionUtils.worldToBoard(player.getPosition()));
@@ -51,7 +52,10 @@ public class World {
 					for(GridPoint2 enemy: enemiesPosition) {
 						if (currentPosition.equals(enemy)) {
 							Direction d = getDirectionOfEnemy(enemy);
-							return new EnemySighting(PositionUtils.boardToWorld(enemy), d, turn);
+							sightings.add(new EnemySighting(PositionUtils.boardToWorld(enemy), d, turn));
+							if(sightings.size() == enemiesPosition.size()){ //All enemies visible
+								return sightings;
+							}
 						}
 						if (gm.hasWall(currentPosition, dir.directionVector())) {
 							wall = true;
@@ -61,7 +65,7 @@ public class World {
 				}
 			}
 		}
-		return null;
+		return sightings;
 	}
 
 	/**

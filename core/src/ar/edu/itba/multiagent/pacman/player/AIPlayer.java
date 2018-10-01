@@ -8,14 +8,18 @@ import ar.edu.itba.multiagent.pacman.environment.PositionUtils;
 import ar.edu.itba.multiagent.pacman.environment.World;
 import ar.edu.itba.multiagent.pacman.states.RandomWalkState;
 import com.google.common.collect.ImmutableList;
+import javafx.geometry.Pos;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class AIPlayer extends Player implements SensingAgent {
 	private World w;
 	private RandomWalkState state;
-	private Random r = new Random(784688759);
+	private Random r = new Random(44);
 	public AIPlayer(GameMap gm, World w) {
 		super(gm);
 		this.w = w;
@@ -23,8 +27,8 @@ public class AIPlayer extends Player implements SensingAgent {
 	}
 
 	@Override public void update(float deltaTime){
-		EnemySighting enemy = w.sense(this);
-		if(enemy == null){
+		List<EnemySighting> enemies = w.sense(this);
+		if(enemies.isEmpty()){
 			System.out.println("Random");
 			state.update(this, deltaTime, 0, r);
 		} else {
@@ -33,9 +37,35 @@ public class AIPlayer extends Player implements SensingAgent {
 					canMove(Direction.DOWN.directionVector()),
 					canMove(Direction.LEFT.directionVector()),
 					canMove(Direction.RIGHT.directionVector())};
-			Direction dir = PositionUtils.getBestDirection(enemy.getPosition(), getPosition(), valid);
-			System.out.println("escapee  " +  dir);
-			super.tryToChangeDirection(dir);
+			Set<Direction> desiredDirections = new HashSet<>();
+			for(EnemySighting enemy : enemies){
+				desiredDirections.add(PositionUtils.getBestDirection(enemy.getPosition(), getPosition(), valid));
+			}
+			Set<Direction> badDirections = new HashSet<>();
+			boolean[] desired = new boolean[4];
+			for(Direction d: desiredDirections){
+				if(desiredDirections.contains(PositionUtils.getInverseDirection(d))){
+					badDirections.add(d);
+					badDirections.add(PositionUtils.getInverseDirection(d));
+					desired[d.ordinal()] = false;
+					desired[PositionUtils.getInverseDirection(d).ordinal()] = false;
+				}
+			}
+			boolean changed = false;
+			for(Direction d: desiredDirections){
+				if(!badDirections.contains(d)){
+					System.out.println("escapee  " +  d);
+					super.tryToChangeDirection(d);
+					changed=true;
+					break;
+				}
+			}
+			for (int i = 0; i < desired.length && !changed; i++) {
+				if(desired[i]){
+					if(super.tryToChangeDirection(Direction.values()[i]))
+						changed = true;
+				}
+			}
 		}
 		super.update(deltaTime);
 	}
