@@ -1,6 +1,7 @@
 package ar.edu.itba.multiagent.pacman.environment;
 
 import ar.edu.itba.multiagent.pacman.Direction;
+import ar.edu.itba.multiagent.pacman.GameObject;
 import ar.edu.itba.multiagent.pacman.agents.SensingAgent;
 import ar.edu.itba.multiagent.pacman.communication.Message;
 import ar.edu.itba.multiagent.pacman.player.AIPlayer;
@@ -9,6 +10,7 @@ import ar.edu.itba.multiagent.pacman.agents.Ghost;
 import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +40,11 @@ public class World {
 		} else {
 			throw new IllegalStateException("Sensing Agent isn't a ghost or a player");
 		}
+		List<Direction> invalidDirections = new ArrayList<>();
+		if(!agent.getVisibilityDirections().get(1))
+			invalidDirections.add(PositionUtils.getInverseDirection(agent.getDirection()));
 		for (Direction dir : Direction.values()) {
-			if (agent.getVisibilityDirections().get(dir.ordinal())) {
+			if (!invalidDirections.contains(dir)) {
 				GridPoint2 currentPosition = PositionUtils.worldToBoard(agent.getPosition());
 				boolean wall = false;
 				for (int i = 0; i < agent.getVisibility() && !wall; i++) {

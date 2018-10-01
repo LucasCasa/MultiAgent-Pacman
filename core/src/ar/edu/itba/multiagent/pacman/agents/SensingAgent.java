@@ -10,4 +10,5 @@ public interface SensingAgent {
 	public List<Boolean> getVisibilityDirections();
 	public int getVisibility();
 	public Vector2 getPosition();
+	public Direction getDirection();
 }
