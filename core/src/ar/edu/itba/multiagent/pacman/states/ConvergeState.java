@@ -17,8 +17,8 @@ public class ConvergeState implements State {
 
 	public void update(Ghost self, float deltaTime, int turn, Random r) {
 		EnemySighting p = self.getWorld().pollBlackBoard();
-		if (turn - p.getTurn() < 500){
-			if(p.getPosition().dst(self.getPosition()) < 16){
+		if (turn - p.getTurn() < 1000){
+			if(p.getPosition().dst(self.getPosition()) < 10){
 				self.getWorld().writeBlackBoard(null);
 				self.tryToChangeDirection(p.getDirection());
 			} else {

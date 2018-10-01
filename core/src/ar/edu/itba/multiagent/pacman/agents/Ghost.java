@@ -55,7 +55,6 @@ public class Ghost extends GameObject implements SensingAgent {
 				p = null;
 		}
 		while(!messages.isEmpty()){
-			System.out.println("Polling Messages");
 			Message m = messages.poll();
 			readMessage(m);
 		}
@@ -104,7 +103,6 @@ public class Ghost extends GameObject implements SensingAgent {
 	}
 
 	public void addMessage(Message message) {
-		System.out.println("Putting Messages");
 		messages.add(message);
 	}
 
