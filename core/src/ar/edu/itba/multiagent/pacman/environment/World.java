@@ -65,7 +65,24 @@ public class World {
 				}
 			}
 		}
+		if (agent instanceof Ghost && sightings.size() == 0){
+			if (((Ghost)agent).isSmell()){
+				return smell(agent);
+			}
+		}
 		return sightings;
+	}
+
+	public List<EnemySighting> smell (SensingAgent agent){
+		List<EnemySighting> sightings = new ArrayList<>();
+		List<GridPoint2> enemiesPosition;
+		enemiesPosition = ImmutableList.of(PositionUtils.worldToBoard(player.getPosition()));
+		GridPoint2 currentPosition = PositionUtils.worldToBoard(agent.getPosition());
+		if( currentPosition.dst2(enemiesPosition.get(0)) <= agent.getVisibility()){
+			GridPoint2 enemiesPos = enemiesPosition.get(0);
+			sightings.add(new EnemySighting(PositionUtils.boardToWorld(enemiesPos),getDirectionOfEnemy(enemiesPos),turn));
+		}
+		return  sightings;
 	}
 
 	/**

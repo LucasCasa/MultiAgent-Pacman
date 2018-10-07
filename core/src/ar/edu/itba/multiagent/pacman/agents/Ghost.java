@@ -30,6 +30,7 @@ public class Ghost extends GameObject implements SensingAgent {
 	private World w;
 	private Random random;
 	private Queue<Message> messages;
+	private boolean smell = true;
 
 	public Ghost(int id, GameMap gm, Config c, World w) {
 		super(gm, c.getInt("speed"));
@@ -116,6 +117,10 @@ public class Ghost extends GameObject implements SensingAgent {
 				canMove(Direction.LEFT.directionVector()) && getDirection() != Direction.RIGHT,
 				canMove(Direction.RIGHT.directionVector()) && getDirection() != Direction.LEFT
 		};
+	}
+
+	public boolean isSmell() {
+		return smell;
 	}
 
 	/*public boolean[] getValidDirections() {
