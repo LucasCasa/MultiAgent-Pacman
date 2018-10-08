@@ -21,7 +21,7 @@ public class ConvergeState implements State {
 			if (p.getPosition().dst(self.getPosition()) < 10) {
 				self.getWorld().writeBlackBoard(null);
 				self.tryToChangeDirection(p.getDirection());
-			} else if (self.getClosestGhost() != self.getPosition() && self.getClosestGhost().dst(self.getPosition()) < 60) {
+			} else if (self.getClosestGhost() != self.getPosition() && self.getClosestGhost().dst(self.getPosition()) < 150) {
 				if(self.getPosition().dst(p.getPosition())< 40) {
 					chase(self, p);
 				}else{

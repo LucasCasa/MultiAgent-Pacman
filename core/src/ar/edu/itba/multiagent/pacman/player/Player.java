@@ -6,8 +6,8 @@ import ar.edu.itba.multiagent.pacman.environment.GameMap;
 
 public class Player extends GameObject {
 
-	public Player(GameMap gm){
-		super(gm, 100);
+	public Player(GameMap gm, boolean lockToGrid){
+		super(gm, 100, lockToGrid);
 
 	}
 

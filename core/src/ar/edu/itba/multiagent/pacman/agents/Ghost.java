@@ -34,8 +34,8 @@ public class Ghost extends GameObject implements SensingAgent {
 	private boolean smell = true;
 	private Vector2 closestGhost;
 
-	public Ghost(int id, GameMap gm, Config c, World w) {
-		super(gm, c.getInt("speed"));
+	public Ghost(int id, GameMap gm, Config c, World w, boolean lockToGrid) {
+		super(gm, c.getInt("speed"), lockToGrid);
 		this.id = id;
 		this.visibility = c.getInt("visibility");
 		this.visiblityDirections = c.getBooleanList("visibility-directions");
@@ -69,7 +69,7 @@ public class Ghost extends GameObject implements SensingAgent {
 		}
 		if(pc != null){
 			pursuitState.update(this, deltaTime, turn, random);
-			if(pc.getPosition().dst2(getPosition()) < 10){
+			if(pc.getPosition().dst2(getPosition()) < 7){
 				w.writeBlackBoard(null);
 			}
 		} else {
