@@ -20,8 +20,8 @@ public class AIPlayer extends Player implements SensingAgent {
 	private World w;
 	private RandomWalkState state;
 	private Random r = new Random(44);
-	public AIPlayer(GameMap gm, World w) {
-		super(gm);
+	public AIPlayer(GameMap gm, World w, boolean lockToGrid) {
+		super(gm, lockToGrid);
 		this.w = w;
 		state = new RandomWalkState();
 	}
@@ -29,7 +29,6 @@ public class AIPlayer extends Player implements SensingAgent {
 	@Override public void update(float deltaTime){
 		List<EnemySighting> enemies = w.sense(this);
 		if(enemies.isEmpty()){
-			System.out.println("Random");
 			state.update(this, deltaTime, 0, r);
 		} else {
 			boolean[] valid = {
@@ -54,7 +53,6 @@ public class AIPlayer extends Player implements SensingAgent {
 			boolean changed = false;
 			for(Direction d: desiredDirections){
 				if(!badDirections.contains(d)){
-					System.out.println("escapee  " +  d);
 					super.tryToChangeDirection(d);
 					changed=true;
 					break;

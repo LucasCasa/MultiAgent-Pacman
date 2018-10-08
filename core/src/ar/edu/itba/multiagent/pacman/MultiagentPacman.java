@@ -48,13 +48,13 @@ public class MultiagentPacman extends ApplicationAdapter {
 		int height = 496 + 48 - 16;
 		config = ConfigFactory.parseFile(new File("application.conf")).resolve();
 		batch = new SpriteBatch();
-		map = new TmxMapLoader().load("map/EMPTY.tmx");
+		map = new TmxMapLoader().load("map/"+ config.getString("map-name") +".tmx");
 		GameMap gm = new GameMap(map);
 		w = new World(gm, p, agents);
 		if(config.getBoolean("pacman-agent")){
-			p = new AIPlayer(gm, w);
+			p = new AIPlayer(gm, w, config.getBoolean("lock-to-grid"));
 		} else {
-			p = new Player(gm);
+			p = new Player(gm, config.getBoolean("lock-to-grid"));
 		}
 		w.setPlayer(p);
 		loadGhost(gm, w);
@@ -73,7 +73,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 		List<String> names = config.getStringList("ghost-names");
 		int id =0;
 		for(String name : names){
-			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w);
+			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w, config.getBoolean("lock-to-grid"));
 			ghost.setPosition(new Vector2(16 * 14 ,16 * 21));
 			GhostRenderer ghostRenderer = new GhostRenderer(ghost, name,
 					config.getBoolean("show-desired-direction"), config.getBoolean("show-visibility-range"));

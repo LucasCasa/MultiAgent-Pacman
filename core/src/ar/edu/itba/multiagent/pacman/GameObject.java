@@ -13,28 +13,23 @@ public class GameObject {
 	protected GameMap gameMap;
 	private int speed;
 	protected Direction desiredDirection = null;
+	private boolean lockToGrid = true;
 
-	public GameObject(GameMap gameMap, int speed) {
+	public GameObject(GameMap gameMap, int speed, boolean lockToGrid) {
 		this.gameMap = gameMap;
 		this.speed = speed;
-	}
-
-	public GameObject(Direction d, Vector2 p){
-		direction = d;
-		position = p;
+		this.lockToGrid = lockToGrid;
 	}
 
 	public boolean canMove(GridPoint2 v){
-//		System.out.println("Can Move: " + !gameMap.hasWall(getPosition(), v));
-//		System.out.println("Vector" + v);
-//		System.out.println("-------------------------------");
 		return !gameMap.hasWall(getPosition(), v);
 	}
 
 	public void update(float deltaTime){
 		tryToChangeDirection(desiredDirection);
 		if(gameMap.canWalk(getPosition(), getDirection().directionVector())) {
-			normalizeToCenter(deltaTime);
+			if(lockToGrid)
+				normalizeToCenter(deltaTime);
 			Vector2 p = getPosition();
 			p.add(PositionUtils.gridToVector(direction.directionVector()).scl(speed * deltaTime));
 			walkToPosition(p);
