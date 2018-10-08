@@ -7,6 +7,7 @@ import ar.edu.itba.multiagent.pacman.communication.MessageType;
 import ar.edu.itba.multiagent.pacman.environment.GameMap;
 import ar.edu.itba.multiagent.pacman.GameObject;
 import ar.edu.itba.multiagent.pacman.environment.EnemySighting;
+import ar.edu.itba.multiagent.pacman.environment.PositionUtils;
 import ar.edu.itba.multiagent.pacman.environment.World;
 import ar.edu.itba.multiagent.pacman.states.State;
 import ar.edu.itba.multiagent.pacman.states.StateUtils;
@@ -31,6 +32,7 @@ public class Ghost extends GameObject implements SensingAgent {
 	private Random random;
 	private Queue<Message> messages;
 	private boolean smell = true;
+	private Vector2 closestGhost;
 
 	public Ghost(int id, GameMap gm, Config c, World w) {
 		super(gm, c.getInt("speed"));
@@ -57,6 +59,10 @@ public class Ghost extends GameObject implements SensingAgent {
 			if(pc != null && (turn - pc.getTurn()) > 5 / deltaTime)
 				pc = null;
 		}
+
+		if(pc != null){
+			closestGhost = this.getPosition();
+		}
 		while(!messages.isEmpty()){
 			Message m = messages.poll();
 			readMessage(m);
@@ -80,7 +86,15 @@ public class Ghost extends GameObject implements SensingAgent {
 	public void readMessage(Message m){
 		switch (m.getType()) {
 			case POSITION:
-				updateGhostPosition(m.getDataAsPosition());
+//				updateGhostPosition(m.getDataAsPosition());
+				GhostPosition pos = m.getDataAsPosition();
+				updateGhostPosition(pos);
+				EnemySighting pc = w.pollBlackBoard();
+				if(pc!=null){
+					if(pos.getPosition().dst2(pc.getPosition()) < closestGhost.dst2(pc.getPosition())){
+						closestGhost = pos.getPosition();
+					}
+				}
 		}
 	}
 
@@ -121,6 +135,10 @@ public class Ghost extends GameObject implements SensingAgent {
 
 	public boolean isSmell() {
 		return smell;
+	}
+
+	public Vector2 getClosestGhost() {
+		return closestGhost;
 	}
 
 	/*public boolean[] getValidDirections() {

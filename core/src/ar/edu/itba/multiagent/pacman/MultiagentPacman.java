@@ -49,6 +49,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 		config = ConfigFactory.parseFile(new File("application.conf")).resolve();
 		batch = new SpriteBatch();
 		map = new TmxMapLoader().load("map/EMPTY.tmx");
+//		map = new TmxMapLoader().load("map/PACMAP.tmx");
 		GameMap gm = new GameMap(map);
 		w = new World(gm, p, agents);
 		if(config.getBoolean("pacman-agent")){

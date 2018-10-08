@@ -81,6 +81,8 @@ public class World {
 		if( currentPosition.dst2(enemiesPosition.get(0)) <= agent.getVisibility()){
 			GridPoint2 enemiesPos = enemiesPosition.get(0);
 			sightings.add(new EnemySighting(PositionUtils.boardToWorld(enemiesPos),getDirectionOfEnemy(enemiesPos),turn));
+//			System.out.println("SMEELLLL");
+
 		}
 		return  sightings;
 	}
