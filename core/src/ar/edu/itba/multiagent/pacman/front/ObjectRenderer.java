@@ -47,7 +47,7 @@ public abstract class ObjectRenderer {
 				break;
 		}
 		batch.draw(sprite, object.getPosition().x - object.getWidth() / 2f,object.getPosition().y - object.getHeight() / 2f, object.getWidth(), object.getHeight(), spriteX, spriteY, sprite.getWidth() / totalSteps, unit, false, false);
-		if(showDirection && object.getDesiredDirection() != null){
+		if(showDirection && object.getDirection() != null){
 			batch.draw(arrow,object.getPosition().x - object.getWidth() / 2f,object.getPosition().y - object.getHeight() / 2f,16,8,32,16,1,1,getRotation(),0,0,32,16,false, false);
 		}
 		if (timePerFrame < timeSinceLastChange) {
@@ -57,7 +57,7 @@ public abstract class ObjectRenderer {
 	}
 
 	private float getRotation() {
-		switch (object.getDesiredDirection()){
+		switch (object.getDirection()){
 			case UP:
 				return 270;
 			case DOWN:

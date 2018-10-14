@@ -32,6 +32,20 @@ public class PositionUtils {
 		}
 		return Direction.values()[maxValidIndex];
 	}
+
+	//Also need valid
+	public static Direction forceVectorToDirection(Vector2 force, boolean[] valid){
+		float[] forces = {force.y, -force.y, -force.x, force.x};
+		float maxValidForce = Integer.MIN_VALUE;
+		int maxValidIndex = -1;
+		for(int i = 0; i< 4; i++){
+			if(valid[i] && forces[i] > maxValidForce){
+				maxValidIndex = i;
+				maxValidForce = forces[i];
+			}
+		}
+		return Direction.values()[maxValidIndex];
+	}
 	public static Vector2 gridToVector(GridPoint2 p){
 		return new Vector2(p.x, p.y);
 	}

@@ -7,7 +7,6 @@ import ar.edu.itba.multiagent.pacman.communication.MessageType;
 import ar.edu.itba.multiagent.pacman.environment.GameMap;
 import ar.edu.itba.multiagent.pacman.GameObject;
 import ar.edu.itba.multiagent.pacman.environment.EnemySighting;
-import ar.edu.itba.multiagent.pacman.environment.PositionUtils;
 import ar.edu.itba.multiagent.pacman.environment.World;
 import ar.edu.itba.multiagent.pacman.states.State;
 import ar.edu.itba.multiagent.pacman.states.StateUtils;
@@ -33,6 +32,7 @@ public class Ghost extends GameObject implements SensingAgent {
 	private Queue<Message> messages;
 	private boolean smell = true;
 	private Vector2 closestGhost;
+	private boolean canMoveBack;
 
 	public Ghost(int id, GameMap gm, Config c, World w, boolean lockToGrid) {
 		super(gm, c.getInt("speed"), lockToGrid);
@@ -45,6 +45,7 @@ public class Ghost extends GameObject implements SensingAgent {
 		pursuitState = StateUtils.StringToState(c.getString("pursuit-strategy"));
 		messages = new LinkedList<>();
 		otherGhosts = new HashMap<>();
+		canMoveBack = c.getBoolean("can-move-back");
 	}
 
 	public void update(float deltaTime, int turn){
@@ -125,12 +126,21 @@ public class Ghost extends GameObject implements SensingAgent {
 
 	//UP, DOWN, LEFT, RIGHT
 	public boolean[] getValidDirections() {
-		return new boolean[]{
-				canMove(Direction.UP.directionVector()) && getDirection() != Direction.DOWN,
-				canMove(Direction.DOWN.directionVector()) && getDirection() != Direction.UP,
-				canMove(Direction.LEFT.directionVector()) && getDirection() != Direction.RIGHT,
-				canMove(Direction.RIGHT.directionVector()) && getDirection() != Direction.LEFT
-		};
+		if (canMoveBack) {
+			return new boolean[]{
+					canMove(Direction.UP.directionVector()),
+					canMove(Direction.DOWN.directionVector()),
+					canMove(Direction.LEFT.directionVector()),
+					canMove(Direction.RIGHT.directionVector())
+			};
+		} else {
+			return new boolean[]{
+					canMove(Direction.UP.directionVector()) && getDirection() != Direction.DOWN,
+					canMove(Direction.DOWN.directionVector()) && getDirection() != Direction.UP,
+					canMove(Direction.LEFT.directionVector()) && getDirection() != Direction.RIGHT,
+					canMove(Direction.RIGHT.directionVector()) && getDirection() != Direction.LEFT
+			};
+		}
 	}
 
 	public boolean isSmell() {

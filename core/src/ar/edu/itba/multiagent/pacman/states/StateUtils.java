@@ -10,6 +10,8 @@ public class StateUtils {
 				return new ConvergeState();
 			case "Spread":
 				return new SpreadState();
+			case "Force":
+				return new ConvergeWithForceState();
 			default:
 				return null;
 		}
