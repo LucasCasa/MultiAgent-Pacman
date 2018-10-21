@@ -7,18 +7,14 @@ import ar.edu.itba.multiagent.pacman.communication.MessageType;
 import ar.edu.itba.multiagent.pacman.environment.GameMap;
 import ar.edu.itba.multiagent.pacman.GameObject;
 import ar.edu.itba.multiagent.pacman.environment.EnemySighting;
+import ar.edu.itba.multiagent.pacman.environment.PositionUtils;
 import ar.edu.itba.multiagent.pacman.environment.World;
 import ar.edu.itba.multiagent.pacman.states.State;
 import ar.edu.itba.multiagent.pacman.states.StateUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.typesafe.config.Config;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 public class Ghost extends GameObject implements SensingAgent {
 	private int id;
@@ -44,7 +40,7 @@ public class Ghost extends GameObject implements SensingAgent {
 		searchState = StateUtils.StringToState(c.getString("search-strategy"));
 		pursuitState = StateUtils.StringToState(c.getString("pursuit-strategy"));
 		messages = new LinkedList<>();
-		otherGhosts = new HashMap<>();
+		otherGhosts = new LinkedHashMap<>();
 		canMoveBack = c.getBoolean("can-move-back");
 	}
 
@@ -70,8 +66,9 @@ public class Ghost extends GameObject implements SensingAgent {
 		}
 		if(pc != null){
 			pursuitState.update(this, deltaTime, turn, random);
-			if(pc.getPosition().dst2(getPosition()) < 7){
+			if(PositionUtils.worldToBoard(getPosition()).equals(PositionUtils.worldToBoard(pc.getPosition()))){
 				w.writeBlackBoard(null);
+				System.out.printf("LLegue");
 			}
 		} else {
 			searchState.update(this, deltaTime, turn, random);

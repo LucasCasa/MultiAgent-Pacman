@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class MultiagentPacman extends ApplicationAdapter {
 	private SpriteBatch batch;
@@ -37,6 +38,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 	private TiledMap map;
 	private TiledMapRenderer m;
 	private OrthographicCamera camera;
+	private Random shuffleRandom;
 	private Config config;
 	private World w;
 	private boolean gameOver = false;
@@ -67,6 +69,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 		camera.setToOrtho(false, width, height);
 		camera.update();
 		m.setView(camera);
+		shuffleRandom = new Random(1);
 	}
 
 	private void loadGhost(GameMap gm, World w) {
@@ -84,13 +87,18 @@ public class MultiagentPacman extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		float deltaTime = Gdx.graphics.getDeltaTime();
+		float deltaTime;
+		if(config.getBoolean("pacman-agent")) {
+			deltaTime = 1 / 30f;
+		} else {
+			deltaTime = Gdx.graphics.getDeltaTime();
+		}
 		turn++;
 		w.update(turn);
 		if(!gameOver) {
 			p.update(deltaTime);
 
-			Collections.shuffle(agents);
+			Collections.shuffle(agents, shuffleRandom);
 			agents.forEach(agent -> agent.update(deltaTime, turn));
 			agents.forEach(agent -> {
 				if (PositionUtils.worldToBoard(agent.getPosition()).equals(PositionUtils.worldToBoard(p.getPosition()))) {

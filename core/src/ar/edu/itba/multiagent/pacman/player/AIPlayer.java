@@ -10,11 +10,7 @@ import ar.edu.itba.multiagent.pacman.states.RandomWalkState;
 import com.google.common.collect.ImmutableList;
 import javafx.geometry.Pos;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class AIPlayer extends Player implements SensingAgent {
 	private World w;
@@ -36,11 +32,11 @@ public class AIPlayer extends Player implements SensingAgent {
 					canMove(Direction.DOWN.directionVector()),
 					canMove(Direction.LEFT.directionVector()),
 					canMove(Direction.RIGHT.directionVector())};
-			Set<Direction> desiredDirections = new HashSet<>();
+			Set<Direction> desiredDirections = new LinkedHashSet<>();
 			for(EnemySighting enemy : enemies){
 				desiredDirections.add(PositionUtils.getBestDirection(enemy.getPosition(), getPosition(), valid));
 			}
-			Set<Direction> badDirections = new HashSet<>();
+			Set<Direction> badDirections = new LinkedHashSet<>();
 			boolean[] desired = new boolean[4];
 			for(Direction d: desiredDirections){
 				if(desiredDirections.contains(PositionUtils.getInverseDirection(d))){
