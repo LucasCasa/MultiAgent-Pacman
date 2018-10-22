@@ -28,7 +28,11 @@ public class ConvergeWithForceState extends SeekPacMan implements State{
                 force.add(getForce(self.getPosition(), ghost, -1));
             }
         });
+        boolean affected = force.x == 0 && force.y == 0;
         force.add(getForce(self.getPosition(), pacman.getPosition(), 2));
+        if(affected) {
+            System.out.println(self.getId() + " -> " + force.x + " " + force.y + " -> " + PositionUtils.forceVectorToDirection(force, self.getValidDirections()));
+        }
         self.tryToChangeDirection(PositionUtils.forceVectorToDirection(force, self.getValidDirections()));
     }
 

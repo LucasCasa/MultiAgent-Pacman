@@ -89,7 +89,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 	public void render () {
 		float deltaTime;
 		if(config.getBoolean("pacman-agent")) {
-			deltaTime = 1 / 30f;
+			deltaTime = 1 / 60f;
 		} else {
 			deltaTime = Gdx.graphics.getDeltaTime();
 		}

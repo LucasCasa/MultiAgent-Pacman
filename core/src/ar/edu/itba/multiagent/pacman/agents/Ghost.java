@@ -147,13 +147,4 @@ public class Ghost extends GameObject implements SensingAgent {
 	public Vector2 getClosestGhost() {
 		return closestGhost;
 	}
-
-	/*public boolean[] getValidDirections() {
-		return new boolean[]{
-				canMove(Direction.UP.directionVector()),
-				canMove(Direction.DOWN.directionVector()),
-				canMove(Direction.LEFT.directionVector()),
-				canMove(Direction.RIGHT.directionVector())
-		};
-	}*/
 }
