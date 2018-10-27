@@ -12,6 +12,8 @@ public class StateUtils {
 				return new SpreadState();
 			case "Force":
 				return new ConvergeWithForceState();
+			case "ForcePredict":
+				return new ConvergePredictWithForceState();
 			default:
 				return null;
 		}

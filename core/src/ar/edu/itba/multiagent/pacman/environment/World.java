@@ -31,13 +31,14 @@ public class World {
 		this.turn = turn;
 	}
 
+	/**This function is unoptimized **/
 	public List<EnemySighting> sense(SensingAgent agent){
 		List<EnemySighting> sightings = new ArrayList<>();
-		List<GridPoint2> enemiesPosition;
+		List<? extends GameObject> enemies;
 		if(agent instanceof Ghost){
-			enemiesPosition = ImmutableList.of(PositionUtils.worldToBoard(player.getPosition()));
+			enemies= ImmutableList.of(player);
 		} else if( agent instanceof AIPlayer){
-			enemiesPosition = agents.stream().map(a -> PositionUtils.worldToBoard(a.getPosition())).collect(Collectors.toList());
+			enemies = agents;
 		} else {
 			throw new IllegalStateException("Sensing Agent isn't a ghost or a player");
 		}
@@ -49,11 +50,10 @@ public class World {
 				GridPoint2 currentPosition = PositionUtils.worldToBoard(agent.getPosition());
 				boolean wall = false;
 				for (int i = 0; i < agent.getVisibility() && !wall; i++) {
-					for(GridPoint2 enemy: enemiesPosition) {
-						if (currentPosition.equals(enemy)) {
-							Direction d = getDirectionOfEnemy(enemy);
-							sightings.add(new EnemySighting(PositionUtils.boardToWorld(enemy), d, turn));
-							if(sightings.size() == enemiesPosition.size()){ //All enemies visible
+					for(GameObject enemy: enemies) {
+						if (currentPosition.equals(PositionUtils.worldToBoard(enemy.getPosition()))) {
+							sightings.add(new EnemySighting(enemy.getPosition(), enemy.getDirection(), enemy.getSpeed(), turn));
+							if(sightings.size() == enemies.size()){ //All enemies visible
 								return sightings;
 							}
 						}
@@ -75,14 +75,9 @@ public class World {
 
 	public List<EnemySighting> smell (SensingAgent agent){
 		List<EnemySighting> sightings = new ArrayList<>();
-		List<GridPoint2> enemiesPosition;
-		enemiesPosition = ImmutableList.of(PositionUtils.worldToBoard(player.getPosition()));
 		GridPoint2 currentPosition = PositionUtils.worldToBoard(agent.getPosition());
-		if( currentPosition.dst2(enemiesPosition.get(0)) <= agent.getVisibility()){
-			GridPoint2 enemiesPos = enemiesPosition.get(0);
-			sightings.add(new EnemySighting(PositionUtils.boardToWorld(enemiesPos),getDirectionOfEnemy(enemiesPos),turn));
-//			System.out.println("SMEELLLL");
-
+		if( currentPosition.dst2(PositionUtils.worldToBoard(player.getPosition())) <= agent.getVisibility()){
+			sightings.add(new EnemySighting(player.getPosition(), player.getDirection(), player.getSpeed(), turn));
 		}
 		return  sightings;
 	}

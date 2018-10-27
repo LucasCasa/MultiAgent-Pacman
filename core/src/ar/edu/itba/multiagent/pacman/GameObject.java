@@ -110,4 +110,8 @@ public class GameObject {
 	public Direction getDesiredDirection(){
 	    return desiredDirection;
     }
+
+    public int getSpeed() {
+		return speed;
+	}
 }

@@ -7,11 +7,13 @@ public class EnemySighting implements SensingData {
 
 	private Vector2 position;
 	private Direction direction;
+	private int speed;
 	private int turn;
 
-	public EnemySighting(Vector2 p, Direction d, int turn){
+	public EnemySighting(Vector2 p, Direction d, int speed, int turn){
 		position = p;
 		direction = d;
+		this.speed = speed;
 		this.turn = turn;
 	}
 
@@ -33,5 +35,13 @@ public class EnemySighting implements SensingData {
 
 	public int getTurn() {
 		return turn;
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
 }

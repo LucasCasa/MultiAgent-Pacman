@@ -21,7 +21,7 @@ public class ConvergeWithForceState extends SeekPacMan implements State{
         sight.ifPresent(pacman -> chase(self, pacman));
     }
 
-    private void chase(Ghost self, EnemySighting pacman) {
+    protected void chase(Ghost self, EnemySighting pacman) {
         Vector2 force = new Vector2(0,0);
         self.getOtherGhosts().values().forEach(ghost -> {
             if(self.getPosition().dst2(ghost) < 16*5 * 16*5 && self.getPosition().dst2(pacman.getPosition()) > 16*3 * 16*3) {
