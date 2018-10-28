@@ -14,13 +14,17 @@ public class ConvergePredictWithForceState extends ConvergeWithForceState {
     public void update(Ghost self, float deltaTime, int turn, Random r) {
         Optional<EnemySighting> sight = seek(self, turn);
         Optional<EnemySighting> newPos = sight.map(s -> predictPosition(s, self));
+        newPos.ifPresent(pacman -> self.setTarget(pacman.getPosition().cpy()));
         newPos.ifPresent(pacman -> chase(self, pacman));
     }
 
     private EnemySighting predictPosition(EnemySighting original, Ghost self) {
         if(original.getPosition().dst2(self.getPosition()) > 16*16*3*3) {
-            float timeToArrive = original.getPosition().cpy().sub(self.getPosition()).len() / self.getSpeed();
-            Vector2 newTarget = original.getPosition().cpy().add(multiply(original.getDirection().directionVector(), timeToArrive * original.getSpeed()));
+            Vector2 newTarget = intercept(original, self);
+            if(newTarget == null){
+                float timeToArrive = original.getPosition().cpy().sub(self.getPosition()).len() / self.getSpeed();
+                newTarget = original.getPosition().cpy().add(multiply(original.getDirection().directionVector(), timeToArrive * original.getSpeed()));
+            }
             return new EnemySighting(newTarget, original.getDirection(), original.getSpeed(), original.getTurn());
         }
         return original;

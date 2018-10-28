@@ -79,7 +79,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w, config.getBoolean("lock-to-grid"));
 			ghost.setPosition(new Vector2(16 * 14 ,16 * 21));
 			GhostRenderer ghostRenderer = new GhostRenderer(ghost, name,
-					config.getBoolean("show-desired-direction"), config.getBoolean("show-visibility-range"));
+					config.getBoolean("show-desired-direction"), config.getBoolean("show-visibility-range"), config.getBoolean("show-target"));
 			agents.add(ghost);
 			renderers.add(ghostRenderer);
 		}

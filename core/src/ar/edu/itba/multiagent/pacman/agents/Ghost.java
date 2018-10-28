@@ -26,6 +26,7 @@ public class Ghost extends GameObject implements SensingAgent {
 	private World w;
 	private Random random;
 	private Queue<Message> messages;
+	private Vector2 target = new Vector2(0,0);
 	private boolean smell = true;
 	private Vector2 closestGhost;
 	private boolean canMoveBack;
@@ -146,5 +147,13 @@ public class Ghost extends GameObject implements SensingAgent {
 
 	public Vector2 getClosestGhost() {
 		return closestGhost;
+	}
+
+	public Vector2 getTarget() {
+		return target;
+	}
+
+	public void setTarget(Vector2 target) {
+		this.target = target;
 	}
 }
