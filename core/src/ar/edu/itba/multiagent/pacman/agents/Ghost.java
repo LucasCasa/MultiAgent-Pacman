@@ -31,18 +31,19 @@ public class Ghost extends GameObject implements SensingAgent {
 	private Vector2 closestGhost;
 	private boolean canMoveBack;
 
-	public Ghost(int id, GameMap gm, Config c, World w, boolean lockToGrid) {
-		super(gm, c.getInt("speed"), lockToGrid);
+	public Ghost(int id, GameMap gm, Config ghostConfig, World w, boolean lockToGrid, Config globalConfig) {
+		super(gm, ghostConfig.getInt("speed"), lockToGrid);
 		this.id = id;
-		this.visibility = c.getInt("visibility");
-		this.visiblityDirections = c.getBooleanList("visibility-directions");
+		this.visibility = ghostConfig.getInt("visibility");
+		this.visiblityDirections = ghostConfig.getBooleanList("visibility-directions");
 		this.w = w;
-		this.random = new Random(c.getInt("seed"));
-		searchState = StateUtils.StringToState(c.getString("search-strategy"));
-		pursuitState = StateUtils.StringToState(c.getString("pursuit-strategy"));
+		this.random = new Random(ghostConfig.getInt("seed"));
+		searchState = StateUtils.StringToState(ghostConfig.getString("search-strategy"), globalConfig);
+		pursuitState = StateUtils.StringToState(ghostConfig.getString("pursuit-strategy"), globalConfig);
 		messages = new LinkedList<>();
 		otherGhosts = new LinkedHashMap<>();
-		canMoveBack = c.getBoolean("can-move-back");
+		canMoveBack = ghostConfig.getBoolean("can-move-back");
+		smell = ghostConfig.getBoolean("smell");
 	}
 
 	public void update(float deltaTime, int turn){

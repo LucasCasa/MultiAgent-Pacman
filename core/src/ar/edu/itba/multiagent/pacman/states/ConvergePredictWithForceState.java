@@ -4,12 +4,20 @@ import ar.edu.itba.multiagent.pacman.agents.Ghost;
 import ar.edu.itba.multiagent.pacman.environment.EnemySighting;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
+import com.typesafe.config.Config;
 
 import java.util.Optional;
 import java.util.Random;
 
 public class ConvergePredictWithForceState extends ConvergeWithForceState {
+    private int minDistance;
 
+    public ConvergePredictWithForceState(Config c){
+        super(c);
+        Config force = c.getConfig("predict-params");
+        minDistance = force.getInt("min-distance");
+        minDistance = 16*16*minDistance*minDistance; //Convert to dst2
+    }
     @Override
     public void update(Ghost self, float deltaTime, int turn, Random r) {
         Optional<EnemySighting> sight = seek(self, turn);
@@ -19,11 +27,12 @@ public class ConvergePredictWithForceState extends ConvergeWithForceState {
     }
 
     private EnemySighting predictPosition(EnemySighting original, Ghost self) {
-        if(original.getPosition().dst2(self.getPosition()) > 16*16*3*3) {
+        if(original.getPosition().dst2(self.getPosition()) > minDistance) {
             Vector2 newTarget = intercept(original, self);
             if(newTarget == null){
                 float timeToArrive = original.getPosition().cpy().sub(self.getPosition()).len() / self.getSpeed();
                 newTarget = original.getPosition().cpy().add(multiply(original.getDirection().directionVector(), timeToArrive * original.getSpeed()));
+                newTarget.set(Math.min(Math.max(16, newTarget.x), 432), Math.min(Math.max(48, newTarget.y), 528));
             }
             return new EnemySighting(newTarget, original.getDirection(), original.getSpeed(), original.getTurn());
         }
