@@ -45,14 +45,13 @@ public class GameManager {
 		shuffleRandom = new Random(1);
 		loadGhost(gm, w, config);
 		p.setPosition(new Vector2(100, 100));
-		Gdx.input.setInputProcessor(new PlayerInput(p));
 	}
 
 	private void loadGhost(GameMap gm, World w, Config config) {
 		List<String> names = config.getStringList("ghost-names");
 		int id =0;
 		for(String name : names){
-			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w, config.getBoolean("lock-to-grid"));
+			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w, config.getBoolean("lock-to-grid"), config);
 			ghost.setPosition(new Vector2(16 * 14 ,16 * 21));
 			agents.add(ghost);
 		}

@@ -1,5 +1,6 @@
 package ar.edu.itba.multiagent.pacman;
 
+import ar.edu.itba.multiagent.pacman.player.PlayerInput;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.typesafe.config.Config;
@@ -19,6 +20,7 @@ public class MultiagentPacman extends ApplicationAdapter {
 		config = ConfigFactory.parseFile(new File("application.conf")).resolve();
 		gm = new GameManager();
 		rm = new RenderManager(gm);
+        Gdx.input.setInputProcessor(new PlayerInput(gm.getPlayer(), this));
 	}
 
 	@Override
