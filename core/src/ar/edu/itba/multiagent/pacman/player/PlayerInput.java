@@ -1,15 +1,17 @@
 package ar.edu.itba.multiagent.pacman.player;
 
 import ar.edu.itba.multiagent.pacman.Direction;
+import ar.edu.itba.multiagent.pacman.MultiagentPacman;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 public class PlayerInput implements InputProcessor {
 
 	private Player player;
-
-	public PlayerInput(Player p){
+	private MultiagentPacman pause;
+	public PlayerInput(Player p, MultiagentPacman pause){
 		player = p;
+		this.pause = pause;
 	}
 
 	@Override
@@ -52,6 +54,9 @@ public class PlayerInput implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
+		if(character == ' '){
+			pause.pause = !pause.pause;
+		}
 		return false;
 	}
 
