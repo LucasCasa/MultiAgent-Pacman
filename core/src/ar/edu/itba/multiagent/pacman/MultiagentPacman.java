@@ -31,58 +31,17 @@ import java.util.List;
 import java.util.Random;
 
 public class MultiagentPacman extends ApplicationAdapter {
-	private SpriteBatch batch;
-	private Player p;
-	private List<Ghost> agents = new ArrayList<>();
-	private List<ObjectRenderer> renderers = new ArrayList<>();
-	private TiledMap map;
-	private TiledMapRenderer m;
-	private OrthographicCamera camera;
-	private Random shuffleRandom;
+
 	private Config config;
 	private World w;
-	private boolean gameOver = false;
-	private int turn = 0;
+	private GameManager gm;
+	private RenderManager rm;
 
 	@Override
 	public void create () {
-		int width = 448;
-		int height = 496 + 48 - 16;
 		config = ConfigFactory.parseFile(new File("application.conf")).resolve();
-		batch = new SpriteBatch();
-		map = new TmxMapLoader().load("map/"+ config.getString("map-name") +".tmx");
-		GameMap gm = new GameMap(map);
-		w = new World(gm, p, agents);
-		if(config.getBoolean("pacman-agent")){
-			p = new AIPlayer(gm, w, config.getBoolean("lock-to-grid"));
-		} else {
-			p = new Player(gm, config.getBoolean("lock-to-grid"));
-		}
-		w.setPlayer(p);
-		loadGhost(gm, w);
-		m = new OrthogonalTiledMapRenderer(map);
-		p.setPosition(new Vector2(100, 100));
-		Texture pt = new Texture("sprites/Pacman_Anim.png");
-		renderers.add(new PlayerRenderer(p, pt));
-		Gdx.input.setInputProcessor(new PlayerInput(p));
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, width, height);
-		camera.update();
-		m.setView(camera);
-		shuffleRandom = new Random(1);
-	}
-
-	private void loadGhost(GameMap gm, World w) {
-		List<String> names = config.getStringList("ghost-names");
-		int id =0;
-		for(String name : names){
-			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w, config.getBoolean("lock-to-grid"));
-			ghost.setPosition(new Vector2(16 * 14 ,16 * 21));
-			GhostRenderer ghostRenderer = new GhostRenderer(ghost, name,
-					config.getBoolean("show-desired-direction"), config.getBoolean("show-visibility-range"), config.getBoolean("show-target"));
-			agents.add(ghost);
-			renderers.add(ghostRenderer);
-		}
+		gm = new GameManager();
+		rm = new RenderManager(gm);
 	}
 
 	@Override
@@ -93,34 +52,13 @@ public class MultiagentPacman extends ApplicationAdapter {
 		} else {
 			deltaTime = Gdx.graphics.getDeltaTime();
 		}
-		turn++;
-		w.update(turn);
-		if(!gameOver) {
-			p.update(deltaTime);
 
-			Collections.shuffle(agents, shuffleRandom);
-			agents.forEach(agent -> agent.update(deltaTime, turn));
-			agents.forEach(agent -> {
-				if (PositionUtils.worldToBoard(agent.getPosition()).equals(PositionUtils.worldToBoard(p.getPosition()))) {
-					gameOver = true;
-				}
-			});
-		}
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		m.render();
-		batch.begin();
-		m.setView(camera);
-		//batch.draw(img, 0, 0);
-		renderers.forEach(rend -> rend.render(batch, deltaTime));
-		batch.end();
+		gm.update(deltaTime);
+		rm.render(deltaTime);
 	}
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
-		renderers.forEach(ObjectRenderer::dispose);
+		rm.dispose();
 	}
 }

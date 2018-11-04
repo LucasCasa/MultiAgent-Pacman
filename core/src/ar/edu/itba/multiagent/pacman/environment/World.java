@@ -21,9 +21,8 @@ public class World {
 	private EnemySighting blackboard;
 	private int turn;
 
-	public World(GameMap gm, Player p, List<Ghost> agents){
+	public World(GameMap gm, List<Ghost> agents){
 		this.gm = gm;
-		this.player = p;
 		this.agents = agents;
 	}
 
