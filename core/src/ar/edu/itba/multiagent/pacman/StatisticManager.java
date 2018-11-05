@@ -5,6 +5,8 @@ import ar.edu.itba.multiagent.pacman.environment.PositionUtils;
 import ar.edu.itba.multiagent.pacman.player.Player;
 import ar.edu.itba.multiagent.pacman.states.MoveState;
 import com.badlogic.gdx.math.GridPoint2;
+import com.typesafe.config.Config;
+import org.jfree.ui.RefineryUtilities;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
@@ -24,9 +26,11 @@ public class StatisticManager {
     Integer mapBlocks;
     Integer mapFree;
     List<Integer> viewedTiles;
+    Config c;
+    LineChart lc;
+    boolean realTimePlot = false;
 
-
-    public StatisticManager(GameManager gm) {
+    public StatisticManager(GameManager gm, Config c) {
         timeSearching = new ArrayList<>();
         timeChasing = new ArrayList<>();
         distanceToPacman = new ArrayList<>();
@@ -41,6 +45,14 @@ public class StatisticManager {
         }
         scanMap();
         viewedTiles = new ArrayList<>();
+        this.c = c;
+        realTimePlot = c.getBoolean("real-time-plot");
+        if (realTimePlot){
+            lc = new LineChart(c);
+            lc.pack();
+            RefineryUtilities.centerFrameOnScreen(lc);
+            lc.setVisible(true);
+        }
     }
 
     public void update(float deltaTime){
@@ -93,7 +105,14 @@ public class StatisticManager {
         System.out.println("Starting distance : " + distanceToPacman.get(0).get(0));
         System.out.println("Map free : " + mapFree );
         System.out.println("Map blocked : " + mapBlocks);
-        viewedTiles.stream().forEach(v -> System.out.print(v + " -"));
+        viewedTiles.forEach(v -> System.out.print(v + " -"));
+        if(!realTimePlot) {
+            lc = new LineChart(c);
+            lc.pack();
+            RefineryUtilities.centerFrameOnScreen(lc);
+            lc.setVisible(true);
+            lc.addResult(distanceToPacman);
+        }
     }
 
     public void finishStats(){
@@ -112,6 +131,9 @@ public class StatisticManager {
         for(Ghost ghost : ghosts){
             Float distance = ghost.getPosition().dst(player.getPosition());
             distanceToPacman.get(ghost.getId()).add(distance/16);
+            if(realTimePlot){
+                lc.addSingleFrame(distance, ghost.getId(), distanceToPacman.get(ghost.getId()).size());
+            }
         }
     }
 

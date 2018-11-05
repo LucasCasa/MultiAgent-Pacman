@@ -47,12 +47,12 @@ public class GameManager {
 		shuffleRandom = new Random(1);
 		loadGhost(gm, w, config);
 
-		stats = new StatisticManager(this);
+		stats = new StatisticManager(this, config);
 	}
 
 	private void loadGhost(GameMap gm, World w, Config config) {
 		List<String> names = config.getStringList("ghost-names");
-		int id =0;
+		int id = 0;
 		for(String name : names){
 			Ghost ghost = new Ghost(id++, gm, config.getConfig(name), w, config.getBoolean("lock-to-grid"), config);
 			ghost.setPosition(new Vector2(16 * 14 ,16 * 21));
