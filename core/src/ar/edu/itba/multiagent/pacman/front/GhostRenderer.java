@@ -34,7 +34,6 @@ public class GhostRenderer extends ObjectRenderer {
 		sight = new Texture(senseArea);
 		target = new Texture(targetMap);
 
-
 	}
 
 	private Color getGhostColor(String name) {

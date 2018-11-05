@@ -86,7 +86,7 @@ public class GameMap {
 		return hasWall(PositionUtils.worldToBoard(position), direction);
 	}
 
-	boolean hasWall(GridPoint2 position, GridPoint2 direction){
+	public boolean hasWall(GridPoint2 position, GridPoint2 direction){
 		int x = position.x  + direction.x;
 		int y = position.y + direction.y;
 
@@ -115,4 +115,14 @@ public class GameMap {
 		int x = PositionUtils.worldToBoard(position).x;
 		return x < 0 || x >= WIDTH;
 	}
+
+	public int getWIDTH() {
+		return WIDTH;
+	}
+
+	public int getHEIGHT() {
+		return HEIGHT;
+	}
+
+	public boolean[][] getBlocks(){ return blocks; }
 }

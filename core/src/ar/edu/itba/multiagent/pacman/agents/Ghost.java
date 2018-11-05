@@ -9,6 +9,7 @@ import ar.edu.itba.multiagent.pacman.GameObject;
 import ar.edu.itba.multiagent.pacman.environment.EnemySighting;
 import ar.edu.itba.multiagent.pacman.environment.PositionUtils;
 import ar.edu.itba.multiagent.pacman.environment.World;
+import ar.edu.itba.multiagent.pacman.states.MoveState;
 import ar.edu.itba.multiagent.pacman.states.State;
 import ar.edu.itba.multiagent.pacman.states.StateUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -30,6 +31,7 @@ public class Ghost extends GameObject implements SensingAgent {
 	private boolean smell = true;
 	private Vector2 closestGhost;
 	private boolean canMoveBack;
+	private MoveState chasing = MoveState.SEARCH;
 
 	public Ghost(int id, GameMap gm, Config ghostConfig, World w, boolean lockToGrid, Config globalConfig) {
 		super(gm, ghostConfig.getInt("speed"), lockToGrid);
@@ -67,12 +69,13 @@ public class Ghost extends GameObject implements SensingAgent {
 			readMessage(m);
 		}
 		if(pc != null){
+			chasing = MoveState.CHASE;
 			pursuitState.update(this, deltaTime, turn, random);
 			if(PositionUtils.worldToBoard(getPosition()).equals(PositionUtils.worldToBoard(pc.getPosition()))){
 				w.writeBlackBoard(null);
-				System.out.printf("LLegue");
 			}
 		} else {
+			chasing = MoveState.SEARCH;
 			searchState.update(this, deltaTime, turn, random);
 		}
 		super.update(deltaTime);
@@ -157,4 +160,6 @@ public class Ghost extends GameObject implements SensingAgent {
 	public void setTarget(Vector2 target) {
 		this.target = target;
 	}
+
+	public MoveState getChasing() { return chasing;	}
 }

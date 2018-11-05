@@ -26,6 +26,8 @@ public class ConvergeState extends SeekPacMan implements State {
 		boolean[] valid = self.getValidDirections();
 		self.tryToChangeDirection(PositionUtils.getBestDirection(self.getPosition(), pacManPosition, valid));
 	}
+
+
     //public void update(Ghost self, float deltaTime, int turn, Random r) {
     //    EnemySighting p = self.getWorld().pollBlackBoard();
     //    if (turn - p.getTurn() < 1000) {

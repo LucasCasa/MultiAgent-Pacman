@@ -8,9 +8,12 @@ import ar.edu.itba.multiagent.pacman.player.AIPlayer;
 import ar.edu.itba.multiagent.pacman.player.Player;
 import ar.edu.itba.multiagent.pacman.agents.Ghost;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.ImmutableList;
+import com.sun.javafx.geom.Vec2d;
 
-import java.util.ArrayList;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -118,4 +121,12 @@ public class World {
 			}
 		}
 	}
+
+	public GameMap getGm() {
+		return gm;
+	}
+
+
+
+
 }

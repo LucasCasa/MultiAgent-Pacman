@@ -46,6 +46,7 @@ public class PositionUtils {
 		}
 		return Direction.values()[maxValidIndex];
 	}
+
 	public static Vector2 gridToVector(GridPoint2 p){
 		return new Vector2(p.x, p.y);
 	}

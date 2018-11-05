@@ -31,6 +31,8 @@ public class GameManager {
 	private int turn = 0;
 	private boolean gameOver = false;
 
+	private StatisticManager stats;
+
 	public GameManager(){
 		Config config = ConfigFactory.parseFile(new File("application.conf")).resolve();
 		map = new TmxMapLoader().load("map/"+ config.getString("map-name") +".tmx");
@@ -44,7 +46,8 @@ public class GameManager {
 		w.setPlayer(p);
 		shuffleRandom = new Random(1);
 		loadGhost(gm, w, config);
-		p.setPosition(new Vector2(100, 100));
+
+		stats = new StatisticManager(this);
 	}
 
 	private void loadGhost(GameMap gm, World w, Config config) {
@@ -68,8 +71,10 @@ public class GameManager {
             agents.forEach(agent -> {
                 if (PositionUtils.worldToBoard(agent.getPosition()).equals(PositionUtils.worldToBoard(p.getPosition()))) {
                     gameOver = true;
+                    stats.show();
                 }
             });
+            stats.update(deltaTime);
         }
     }
 
@@ -84,4 +89,6 @@ public class GameManager {
     public Player getPlayer() {
         return p;
     }
+
+    public World getWorld() { return w; }
 }
