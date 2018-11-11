@@ -145,7 +145,7 @@ public class StatisticManager {
         boolean[][] blocks = gm.getWorld().getGm().getBlocks();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if(blocks[i][j] == true){
+                if(blocks[i][j]){
                     mapBlocks++;
                 }else{
                     mapFree++;
@@ -156,7 +156,7 @@ public class StatisticManager {
 
 
     public void viewingArea(List<Ghost> ghosts){
-        Set<GridPoint2> accounted = new HashSet<>();
+        Set<GridPoint2> accounted = new LinkedHashSet<>();
         int total = 0;
         for(Ghost ghost : ghosts){
             List<Direction> invalidDirections = new ArrayList<>();

@@ -11,7 +11,6 @@ public class GameMap {
 	private final int HEIGHT = 31;
 	private boolean[][] blocks = new boolean[HEIGHT][WIDTH];
 	private boolean[][] smallDots = new boolean[HEIGHT][WIDTH];
-	private boolean[][] bigDots = new boolean[HEIGHT][WIDTH];
 	private TiledMapTileLayer map;
 
 	public GameMap(TiledMap m){
@@ -36,7 +35,7 @@ public class GameMap {
 				TiledMapTileLayer.Cell c = dotLayer.getCell(i, j);
 				if(c != null){
 					if(c.getTile().getId() == 23){
-						bigDots[HEIGHT - j + 1][i] = true;
+						System.out.println("shouldnt happen");
 					} else {
 						smallDots[HEIGHT - j + 1][i] = true;
 					}
@@ -105,7 +104,7 @@ public class GameMap {
 	private void prettyPrint(){
 		for(int j = 0; j < HEIGHT; j++){
 			for(int i = 0; i<WIDTH;i++){
-				System.out.print((blocks[j][i]?"1":(smallDots[j][i]?"2":(bigDots[j][i]?"3":"0"))) + " ");
+				System.out.print(blocks[j][i]?"1":"2");
 			}
 			System.out.println();
 		}
