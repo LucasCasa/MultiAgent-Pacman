@@ -5,11 +5,17 @@ import com.typesafe.config.Config;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.IntervalMarker;
+import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
+import org.jfree.ui.Layer;
+import org.jfree.ui.RectangleAnchor;
+import org.jfree.ui.TextAnchor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -90,9 +96,49 @@ public class LineChart extends ApplicationFrame {
 			ghostId++;
 		}
 		int index = values.size();
-		for (int i = 0; i < chasing.size(); i++) {
-			XYSeries series = dataset.getSeries(String.valueOf(index));
-			series.add(i, chasing.get(i)?35:0);
+		Font font = new Font("Dialog", Font.PLAIN, 25);
+		int start = -1;
+		for (int i = 0; i < chasing.size() - 1; i++) {
+			//XYSeries series = dataset.getSeries(String.valueOf(index));
+			if(chasing.get(i) != chasing.get(i + 1)){
+				if(start == -1) {
+					start = i;
+				} else {
+					Marker in = new IntervalMarker(start, i, new Color(0,0,0.5f,1));
+					in.setLabel("Chasing");
+					in.setLabelFont(font);
+					in.setLabelPaint(Color.WHITE);
+					in.setLabelTextAnchor(TextAnchor.TOP_CENTER);
+					in.setLabelAnchor(RectangleAnchor.TOP);
+					lineChart.getXYPlot().addDomainMarker(in, Layer.BACKGROUND);
+					start = -1;
+				}
+//				Marker r = new ValueMarker(i);
+//				r.setLabel(chasing.get(i + 1)?"Chase":"Search");
+//				r.setPaint(Color.WHITE);
+//				r.setLabelFont(font);
+//				r.setLabelPaint(Color.WHITE);
+//				if(chasing.get(i)){
+//					r.setLabelTextAnchor(TextAnchor.TOP_LEFT);
+//					r.setLabelAnchor(RectangleAnchor.TOP_LEFT);
+//				} else {
+//					r.setLabelTextAnchor(TextAnchor.BOTTOM_LEFT);
+//					r.setLabelAnchor(RectangleAnchor.BOTTOM_LEFT);
+//				}
+//
+//				lineChart.getXYPlot().addDomainMarker(r);
+
+			}
+			//series.add(i, chasing.get(i)?35:0);
+		}
+		if(start != -1) {
+			Marker in = new IntervalMarker(start, chasing.size(), new Color(0,0,0.5f,1));
+			in.setLabel("Chasing");
+			in.setLabelFont(font);
+			in.setLabelPaint(Color.WHITE);
+			in.setLabelTextAnchor(TextAnchor.TOP_LEFT);
+			in.setLabelAnchor(RectangleAnchor.TOP);
+			lineChart.getXYPlot().addDomainMarker(in, Layer.BACKGROUND);
 		}
 	}
 
