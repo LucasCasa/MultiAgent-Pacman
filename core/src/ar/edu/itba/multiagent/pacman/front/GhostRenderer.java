@@ -68,7 +68,7 @@ public class GhostRenderer extends ObjectRenderer {
 			int range = ghost.getVisibility()* 16;
 			batch.draw(sight, ghost.getPosition().x - range,ghost.getPosition().y - range, range * 2, range * 2);
 		}
-		if(showTarget){
+		if(showTarget && ghost.isChasing()){
 			batch.draw(target,ghost.getTarget().x - 8, ghost.getTarget().y - 8, 16, 16);
 		}
 		super.render(batch, deltaTime);

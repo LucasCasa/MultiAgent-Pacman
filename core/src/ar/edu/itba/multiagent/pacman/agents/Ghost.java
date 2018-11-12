@@ -162,4 +162,8 @@ public class Ghost extends GameObject implements SensingAgent {
 	}
 
 	public MoveState getChasing() { return chasing;	}
+
+	public boolean isChasing() {
+		return chasing == MoveState.CHASE;
+	}
 }

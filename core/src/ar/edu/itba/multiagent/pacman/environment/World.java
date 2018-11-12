@@ -54,7 +54,7 @@ public class World {
 				for (int i = 0; i < agent.getVisibility() && !wall; i++) {
 					for(GameObject enemy: enemies) {
 						if (currentPosition.equals(PositionUtils.worldToBoard(enemy.getPosition()))) {
-							sightings.add(new EnemySighting(enemy.getPosition(), enemy.getDirection(), enemy.getSpeed(), turn));
+							sightings.add(new EnemySighting(enemy.getPosition().cpy(), enemy.getDirection(), enemy.getSpeed(), turn));
 							if(sightings.size() == enemies.size()){ //All enemies visible
 								return sightings;
 							}

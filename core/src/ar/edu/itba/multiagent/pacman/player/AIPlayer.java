@@ -15,10 +15,12 @@ import java.util.*;
 public class AIPlayer extends Player implements SensingAgent {
 	private World w;
 	private RandomWalkState state;
-	private Random r = new Random(44);
+	private Random r;
+	private List<Boolean> visibility = ImmutableList.of(true, true, true, true);
+
 	public AIPlayer(GameMap gm, World w, boolean lockToGrid) {
 		super(gm, lockToGrid);
-		r = new Random(4502);
+		r = new Random(4503);
 		this.w = w;
 		state = new RandomWalkState();
 	}
@@ -67,11 +69,11 @@ public class AIPlayer extends Player implements SensingAgent {
 
 	@Override
 	public List<Boolean> getVisibilityDirections() {
-		return ImmutableList.of(true, true, true, true);
+		return visibility;
 	}
 
 	@Override
 	public int getVisibility() {
-		return 10;
+		return 7;
 	}
 }

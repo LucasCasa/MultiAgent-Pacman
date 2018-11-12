@@ -21,10 +21,6 @@ import java.util.List;
 public class LineChart extends ApplicationFrame {
 	private XYSeriesCollection dataset;
 	private JFreeChart lineChart;
-	private boolean show_best;
-	private boolean show_max;
-	private boolean show_avg;
-	private boolean show_min;
 
 	public LineChart(Config c) {
 		super("Distancia de los fantasmas al pacman");
@@ -39,12 +35,21 @@ public class LineChart extends ApplicationFrame {
  		ChartPanel chartPanel = new ChartPanel( lineChart );
 		int seriesCount = lineChart.getXYPlot().getSeriesCount();
 		for (int i = 0; i < seriesCount; i++) {
-			lineChart.getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(4));
+			if(i < seriesCount - 1)
+				lineChart.getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(4));
+			else
+				lineChart.getXYPlot().getRenderer().setSeriesStroke(i, new BasicStroke(2));
+
 		}
 		for (int i = 0; i < seriesCount; i++) {
-			lineChart.getXYPlot().getRenderer().setSeriesPaint(i, getColor(i));
+			if(i < seriesCount - 1)
+				lineChart.getXYPlot().getRenderer().setSeriesPaint(i, getColor(i));
+			else
+				lineChart.getXYPlot().getRenderer().setSeriesPaint(i, Color.WHITE);
 		}
-
+		lineChart.getXYPlot().getRangeAxis().setRange(0, 35);
+		chartPanel.setBackground( Color.BLACK );
+		lineChart.getXYPlot().setBackgroundPaint( Color.BLACK);
 		chartPanel.setPreferredSize( new java.awt.Dimension( 800 , 600 ) );
 		setContentPane( chartPanel );
 	}
@@ -75,15 +80,19 @@ public class LineChart extends ApplicationFrame {
 		return Color.BLACK;
 	}
 
-	public void addResult(List<List<Float>> values){
-		int time = 0;
+	public void addResult(List<List<Float>> values, List<Boolean> chasing){
+		int ghostId = 0;
 		for(List<Float> ghost : values){
 			for (int i = 0; i < ghost.size(); i++) {
-				System.out.println(i);
-				XYSeries serie = dataset.getSeries(String.valueOf(time));
+				XYSeries serie = dataset.getSeries(String.valueOf(ghostId));
 				serie.add(i, ghost.get(i));
 			}
-			time++;
+			ghostId++;
+		}
+		int index = values.size();
+		for (int i = 0; i < chasing.size(); i++) {
+			XYSeries series = dataset.getSeries(String.valueOf(index));
+			series.add(i, chasing.get(i)?35:0);
 		}
 	}
 
@@ -94,9 +103,14 @@ public class LineChart extends ApplicationFrame {
 
 	private XYSeriesCollection createDataset(Config c) {
 		dataset = new XYSeriesCollection();
-		for (int i = 0; i < c.getStringList("ghost-names").size(); i++) {
+		int ghostCount = c.getStringList("ghost-names").size();
+		for (int i = 0; i < ghostCount + 1; i++) {
 			XYSeries data1 = new XYSeries(String.valueOf(i));
-			data1.setDescription(c.getStringList("ghost-names").get(i));
+			if(i == ghostCount){
+				data1.setDescription("");
+			} else {
+				data1.setDescription(c.getStringList("ghost-names").get(i));
+			}
 			dataset.addSeries(data1);
 		}
 		return dataset;

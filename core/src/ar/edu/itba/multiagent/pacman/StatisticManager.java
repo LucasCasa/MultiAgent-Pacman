@@ -15,6 +15,7 @@ public class StatisticManager {
     float timer;
     List<Float> timeSearching;
     List<Float> timeChasing;
+    List<Boolean> isChasing;
     List<List<Float>> distanceToPacman;
 
     List<Float> visibilityRatio;
@@ -35,6 +36,7 @@ public class StatisticManager {
         timeChasing = new ArrayList<>();
         distanceToPacman = new ArrayList<>();
         visibilityRatio = new ArrayList<>();
+        isChasing = new ArrayList<>();
         this.gm = gm;
         timer = 0;
         currentState = MoveState.SEARCH;
@@ -72,6 +74,14 @@ public class StatisticManager {
 
     public void stateTime(MoveState state , float deltaTime){
         currentTime+=deltaTime;
+        switch (state){
+            case CHASE:
+                isChasing.add(true);
+                break;
+            case SEARCH:
+                isChasing.add(false);
+                break;
+        }
         if (!currentState.equals(state)){
             switch(currentState){
                 case CHASE:
@@ -111,7 +121,7 @@ public class StatisticManager {
             lc.pack();
             RefineryUtilities.centerFrameOnScreen(lc);
             lc.setVisible(true);
-            lc.addResult(distanceToPacman);
+            lc.addResult(distanceToPacman, isChasing);
         }
     }
 

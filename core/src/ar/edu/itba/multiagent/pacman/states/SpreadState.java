@@ -4,6 +4,7 @@ import ar.edu.itba.multiagent.pacman.GameObject;
 import ar.edu.itba.multiagent.pacman.agents.Ghost;
 import ar.edu.itba.multiagent.pacman.environment.PositionUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.typesafe.config.Config;
 
 import java.util.Map;
 import java.util.Random;
@@ -11,10 +12,13 @@ import java.util.Random;
 public class SpreadState implements State {
 
 	private RandomWalkState randomState;
+	private int radius;
 
-	public SpreadState() {
+	public SpreadState(Config c) {
+		this.radius = c.getInt("spread-params.min-distance");
 		randomState = new RandomWalkState();
 	}
+
 	@Override
 	public void update(GameObject self, float deltaTime, int turn, Random r) {
 		Ghost ghost = (Ghost) self;
@@ -27,7 +31,7 @@ public class SpreadState implements State {
 				dist = distance;
 			}
 		}
-		if(dist < 16 * 10){
+		if(dist < 16 * radius){
 			self.tryToChangeDirection(PositionUtils.getBestDirection(ghost.getOtherGhosts().get(id), self.getPosition(), ghost.getValidDirections()));
 		} else {
 			randomState.update(self, deltaTime, turn, r);
